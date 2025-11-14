@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(uuid())
+  nombre        String
+  apellido      String
+  email         String      @unique
+  password      String
+  emailVerified Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+  userFundos    UserFundo[]
+
+  @@index([email])
+  @@map("User")
+}
+
+model Rol {
+  id          String      @id @default(uuid())
+  nombre      String      @unique
+  descripcion String?
+  userFundos  UserFundo[]
+
+  @@map("Rol")
+}
+
+model Fundo {
+  id         String      @id @default(uuid())
+  nombre     String
+  direccion  String
+  rut        String      @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
+  creadoPor  String
+  userFundos UserFundo[]
+
+  @@map("Fundo")
+}
+
+model UserFundo {
+  id         String    @id @default(uuid())
+  userId     String
+  fundoId    String
+  assignedAt DateTime  @default(now())
+  fundo      Fundo     @relation(fields: [fundoId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  rolId      String
+  rol        Rol       @relation(fields: [rolId], references: [id])
+  terrenos   Terreno[]
+
+  @@map("UserFundo")
+}
+
+model Terreno {
+  id            String    @id @default(uuid())
+  areaHectareas Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  creadoPor     String
+  lat           Float
+  lon           Float
+  codeSagGrower String
+  userFundoId   String
+  userFundo     UserFundo @relation(fields: [userFundoId], references: [id])
+
+  cuarteles cuartel[]
+
+  @@map("Terreno")
+}
+
+model Suelo {
+  id              String        @id @default(uuid())
+  tipo            String
+  caracteristicas String
+  sueloPlanta     sueloPlanta[]
+  cuartel         cuartel[]
+
+  @@map("Suelo")
+}
+
+model Planta {
+  id           String        @id @default(uuid())
+  nombre       String
+  espacioAncho Float         @map("espacio_ancho")
+  espacioLargo Float         @map("espacio_largo")
+  produccion   Int
+  descripcion  String
+  variedad     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  sueloPlanta  sueloPlanta[]
+  cuartel      cuartel[]
+
+  @@map("Planta")
+}
+
+model cuartel {
+  id        String   @id @default(uuid())
+  hectareas Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  terrenoId String
+  sueloId   String
+  suelo     Suelo    @relation(fields: [sueloId], references: [id])
+  terreno   Terreno  @relation(fields: [terrenoId], references: [id])
+  tarea     Tarea[]
+  plantaId  String
+  planta    Planta   @relation(fields: [plantaId], references: [id])
+
+  @@map("cuartel")
+}
+
+model sueloPlanta {
+  id             String @id @default(uuid())
+  compatibilidad String
+  plantaId       String
+  sueloId        String
+  planta         Planta @relation(fields: [plantaId], references: [id])
+  suelo          Suelo  @relation(fields: [sueloId], references: [id])
+}
+
+model Producto {
+  id          String   @id @default(uuid())
+  nombre      String
+  tipo        String
+  descripcion String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  cuartelId   String
+  creadoPor   String
+  tarea       Tarea[]
+
+  @@map("Producto")
+}
+
+model Tarea {
+  id              String            @id @default(uuid())
+  tipo            String
+  descripcion     String
+  fecha           DateTime
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+  cuartelId       String
+  productoId      String
+  producto        Producto          @relation(fields: [productoId], references: [id])
+  cuartel         cuartel           @relation(fields: [cuartelId], references: [id])
+  ordenAplicacion OrdenAplicacion[]
+
+  @@map("Tarea")
+}
+
+model OrdenAplicacion {
+  id                    String   @id @default(uuid())
+  nombre                String
+  fechaEntrega          DateTime
+  fechaAplicacion       DateTime
+  dosis                 Float
+  cantidadApli          Float
+  objetivo              String
+  mojamientoRecomendado String
+  mojamientoReal        String
+  numMaquinadas         Int
+  gastoTotal            Float
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
+  tareaId               String
+  tarea                 Tarea    @relation(fields: [tareaId], references: [id])
+
+  @@map("OrdenAplicacion")
+}

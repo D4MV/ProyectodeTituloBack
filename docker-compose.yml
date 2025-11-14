@@ -1,0 +1,15 @@
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5432:5432" # Mapea el puerto 5432 del contenedor al host
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terratrack
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistencia de datos
+
+volumes:
+  postgres_data:
