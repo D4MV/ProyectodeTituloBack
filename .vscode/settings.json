@@ -1,3 +1,11 @@
 {
-    "material-icon-theme.activeIconPack": "nest"
+  "material-icon-theme.activeIconPack": "nest",
+  "files.watcherExclude": {
+    "src/generated/**": true
+  },
+  "search.exclude": {
+    "src/generated/**": true
+  },
+  "typescript.tsserver.maxTsServerMemory": 4096,
+"typescript.tsdk": "node_modules\\typescript\\lib"
 }

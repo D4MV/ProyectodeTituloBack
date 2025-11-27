@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     
-    // Intentar obtener token desde cookies primero, luego desde header
+
     const token = this.extractTokenFromCookie(request) || this.extractTokenFromHeader(request);
     
     console.log('Token encontrado:', !!token);
@@ -34,7 +34,9 @@ export class AuthGuard implements CanActivate {
       console.log('Token válido, usuario autenticado:', payload);
 
     }catch(error){
-      console.log('Error verificando token:', error.message);
+      if (error instanceof Error) {
+        console.log('Error verificando token:', error.message);
+      }
       throw new UnauthorizedException('Invalid token');
     }
 

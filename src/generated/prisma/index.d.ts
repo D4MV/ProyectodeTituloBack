@@ -34,6 +34,11 @@ export type Fundo = $Result.DefaultSelection<Prisma.$FundoPayload>
  */
 export type UserFundo = $Result.DefaultSelection<Prisma.$UserFundoPayload>
 /**
+ * Model Encargados
+ * 
+ */
+export type Encargados = $Result.DefaultSelection<Prisma.$EncargadosPayload>
+/**
  * Model Terreno
  * 
  */
@@ -231,6 +236,16 @@ export class PrismaClient<
     * ```
     */
   get userFundo(): Prisma.UserFundoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.encargados`: Exposes CRUD operations for the **Encargados** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Encargados
+    * const encargados = await prisma.encargados.findMany()
+    * ```
+    */
+  get encargados(): Prisma.EncargadosDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.terreno`: Exposes CRUD operations for the **Terreno** model.
@@ -755,6 +770,7 @@ export namespace Prisma {
     Rol: 'Rol',
     Fundo: 'Fundo',
     UserFundo: 'UserFundo',
+    Encargados: 'Encargados',
     Terreno: 'Terreno',
     Suelo: 'Suelo',
     Planta: 'Planta',
@@ -781,7 +797,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "rol" | "fundo" | "userFundo" | "terreno" | "suelo" | "planta" | "cuartel" | "sueloPlanta" | "producto" | "tarea" | "ordenAplicacion"
+      modelProps: "user" | "rol" | "fundo" | "userFundo" | "encargados" | "terreno" | "suelo" | "planta" | "cuartel" | "sueloPlanta" | "producto" | "tarea" | "ordenAplicacion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1078,6 +1094,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserFundoCountArgs<ExtArgs>
             result: $Utils.Optional<UserFundoCountAggregateOutputType> | number
+          }
+        }
+      }
+      Encargados: {
+        payload: Prisma.$EncargadosPayload<ExtArgs>
+        fields: Prisma.EncargadosFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EncargadosFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EncargadosFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          findFirst: {
+            args: Prisma.EncargadosFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EncargadosFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          findMany: {
+            args: Prisma.EncargadosFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>[]
+          }
+          create: {
+            args: Prisma.EncargadosCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          createMany: {
+            args: Prisma.EncargadosCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EncargadosCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>[]
+          }
+          delete: {
+            args: Prisma.EncargadosDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          update: {
+            args: Prisma.EncargadosUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          deleteMany: {
+            args: Prisma.EncargadosDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EncargadosUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EncargadosUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>[]
+          }
+          upsert: {
+            args: Prisma.EncargadosUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EncargadosPayload>
+          }
+          aggregate: {
+            args: Prisma.EncargadosAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEncargados>
+          }
+          groupBy: {
+            args: Prisma.EncargadosGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EncargadosGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EncargadosCountArgs<ExtArgs>
+            result: $Utils.Optional<EncargadosCountAggregateOutputType> | number
           }
         }
       }
@@ -1773,6 +1863,7 @@ export namespace Prisma {
     rol?: RolOmit
     fundo?: FundoOmit
     userFundo?: UserFundoOmit
+    encargados?: EncargadosOmit
     terreno?: TerrenoOmit
     suelo?: SueloOmit
     planta?: PlantaOmit
@@ -1862,10 +1953,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     userFundos: number
+    fundosCreados: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userFundos?: boolean | UserCountOutputTypeCountUserFundosArgs
+    fundosCreados?: boolean | UserCountOutputTypeCountFundosCreadosArgs
   }
 
   // Custom InputTypes
@@ -1884,6 +1977,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountUserFundosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserFundoWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFundosCreadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundoWhereInput
   }
 
 
@@ -1985,10 +2085,12 @@ export namespace Prisma {
    */
 
   export type TerrenoCountOutputType = {
+    encargados: number
     cuarteles: number
   }
 
   export type TerrenoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    encargados?: boolean | TerrenoCountOutputTypeCountEncargadosArgs
     cuarteles?: boolean | TerrenoCountOutputTypeCountCuartelesArgs
   }
 
@@ -2001,6 +2103,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the TerrenoCountOutputType
      */
     select?: TerrenoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TerrenoCountOutputType without action
+   */
+  export type TerrenoCountOutputTypeCountEncargadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncargadosWhereInput
   }
 
   /**
@@ -2377,6 +2486,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userFundos?: boolean | User$userFundosArgs<ExtArgs>
+    fundosCreados?: boolean | User$fundosCreadosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2416,6 +2526,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "apellido" | "email" | "password" | "emailVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userFundos?: boolean | User$userFundosArgs<ExtArgs>
+    fundosCreados?: boolean | User$fundosCreadosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2425,6 +2536,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       userFundos: Prisma.$UserFundoPayload<ExtArgs>[]
+      fundosCreados: Prisma.$FundoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2830,6 +2942,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userFundos<T extends User$userFundosArgs<ExtArgs> = {}>(args?: Subset<T, User$userFundosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFundoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fundosCreados<T extends User$fundosCreadosArgs<ExtArgs> = {}>(args?: Subset<T, User$fundosCreadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3276,6 +3389,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserFundoScalarFieldEnum | UserFundoScalarFieldEnum[]
+  }
+
+  /**
+   * User.fundosCreados
+   */
+  export type User$fundosCreadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fundo
+     */
+    select?: FundoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fundo
+     */
+    omit?: FundoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundoInclude<ExtArgs> | null
+    where?: FundoWhereInput
+    orderBy?: FundoOrderByWithRelationInput | FundoOrderByWithRelationInput[]
+    cursor?: FundoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundoScalarFieldEnum | FundoScalarFieldEnum[]
   }
 
   /**
@@ -4521,6 +4658,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     creadoPor?: boolean
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
     userFundos?: boolean | Fundo$userFundosArgs<ExtArgs>
     _count?: boolean | FundoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fundo"]>
@@ -4533,6 +4671,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     creadoPor?: boolean
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fundo"]>
 
   export type FundoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4543,6 +4682,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     creadoPor?: boolean
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fundo"]>
 
   export type FundoSelectScalar = {
@@ -4557,15 +4697,21 @@ export namespace Prisma {
 
   export type FundoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nombre" | "direccion" | "rut" | "createdAt" | "updatedAt" | "creadoPor", ExtArgs["result"]["fundo"]>
   export type FundoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
     userFundos?: boolean | Fundo$userFundosArgs<ExtArgs>
     _count?: boolean | FundoCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type FundoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type FundoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FundoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FundoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creadopor?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $FundoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Fundo"
     objects: {
+      creadopor: Prisma.$UserPayload<ExtArgs>
       userFundos: Prisma.$UserFundoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4970,6 +5116,7 @@ export namespace Prisma {
    */
   export interface Prisma__FundoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    creadopor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     userFundos<T extends Fundo$userFundosArgs<ExtArgs> = {}>(args?: Subset<T, Fundo$userFundosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFundoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5256,6 +5403,10 @@ export namespace Prisma {
      */
     data: FundoCreateManyInput | FundoCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundoIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5326,6 +5477,10 @@ export namespace Prisma {
      * Limit how many Fundos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundoIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6542,6 +6697,1038 @@ export namespace Prisma {
 
 
   /**
+   * Model Encargados
+   */
+
+  export type AggregateEncargados = {
+    _count: EncargadosCountAggregateOutputType | null
+    _min: EncargadosMinAggregateOutputType | null
+    _max: EncargadosMaxAggregateOutputType | null
+  }
+
+  export type EncargadosMinAggregateOutputType = {
+    id: string | null
+    userFundoId: string | null
+    terrenoId: string | null
+  }
+
+  export type EncargadosMaxAggregateOutputType = {
+    id: string | null
+    userFundoId: string | null
+    terrenoId: string | null
+  }
+
+  export type EncargadosCountAggregateOutputType = {
+    id: number
+    userFundoId: number
+    terrenoId: number
+    _all: number
+  }
+
+
+  export type EncargadosMinAggregateInputType = {
+    id?: true
+    userFundoId?: true
+    terrenoId?: true
+  }
+
+  export type EncargadosMaxAggregateInputType = {
+    id?: true
+    userFundoId?: true
+    terrenoId?: true
+  }
+
+  export type EncargadosCountAggregateInputType = {
+    id?: true
+    userFundoId?: true
+    terrenoId?: true
+    _all?: true
+  }
+
+  export type EncargadosAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Encargados to aggregate.
+     */
+    where?: EncargadosWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Encargados to fetch.
+     */
+    orderBy?: EncargadosOrderByWithRelationInput | EncargadosOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EncargadosWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Encargados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Encargados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Encargados
+    **/
+    _count?: true | EncargadosCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EncargadosMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EncargadosMaxAggregateInputType
+  }
+
+  export type GetEncargadosAggregateType<T extends EncargadosAggregateArgs> = {
+        [P in keyof T & keyof AggregateEncargados]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEncargados[P]>
+      : GetScalarType<T[P], AggregateEncargados[P]>
+  }
+
+
+
+
+  export type EncargadosGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EncargadosWhereInput
+    orderBy?: EncargadosOrderByWithAggregationInput | EncargadosOrderByWithAggregationInput[]
+    by: EncargadosScalarFieldEnum[] | EncargadosScalarFieldEnum
+    having?: EncargadosScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EncargadosCountAggregateInputType | true
+    _min?: EncargadosMinAggregateInputType
+    _max?: EncargadosMaxAggregateInputType
+  }
+
+  export type EncargadosGroupByOutputType = {
+    id: string
+    userFundoId: string
+    terrenoId: string
+    _count: EncargadosCountAggregateOutputType | null
+    _min: EncargadosMinAggregateOutputType | null
+    _max: EncargadosMaxAggregateOutputType | null
+  }
+
+  type GetEncargadosGroupByPayload<T extends EncargadosGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EncargadosGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EncargadosGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EncargadosGroupByOutputType[P]>
+            : GetScalarType<T[P], EncargadosGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EncargadosSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userFundoId?: boolean
+    terrenoId?: boolean
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encargados"]>
+
+  export type EncargadosSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userFundoId?: boolean
+    terrenoId?: boolean
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encargados"]>
+
+  export type EncargadosSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userFundoId?: boolean
+    terrenoId?: boolean
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["encargados"]>
+
+  export type EncargadosSelectScalar = {
+    id?: boolean
+    userFundoId?: boolean
+    terrenoId?: boolean
+  }
+
+  export type EncargadosOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userFundoId" | "terrenoId", ExtArgs["result"]["encargados"]>
+  export type EncargadosInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }
+  export type EncargadosIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }
+  export type EncargadosIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    terreno?: boolean | TerrenoDefaultArgs<ExtArgs>
+  }
+
+  export type $EncargadosPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Encargados"
+    objects: {
+      terreno: Prisma.$TerrenoPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userFundoId: string
+      terrenoId: string
+    }, ExtArgs["result"]["encargados"]>
+    composites: {}
+  }
+
+  type EncargadosGetPayload<S extends boolean | null | undefined | EncargadosDefaultArgs> = $Result.GetResult<Prisma.$EncargadosPayload, S>
+
+  type EncargadosCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EncargadosFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EncargadosCountAggregateInputType | true
+    }
+
+  export interface EncargadosDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Encargados'], meta: { name: 'Encargados' } }
+    /**
+     * Find zero or one Encargados that matches the filter.
+     * @param {EncargadosFindUniqueArgs} args - Arguments to find a Encargados
+     * @example
+     * // Get one Encargados
+     * const encargados = await prisma.encargados.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EncargadosFindUniqueArgs>(args: SelectSubset<T, EncargadosFindUniqueArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Encargados that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EncargadosFindUniqueOrThrowArgs} args - Arguments to find a Encargados
+     * @example
+     * // Get one Encargados
+     * const encargados = await prisma.encargados.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EncargadosFindUniqueOrThrowArgs>(args: SelectSubset<T, EncargadosFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Encargados that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosFindFirstArgs} args - Arguments to find a Encargados
+     * @example
+     * // Get one Encargados
+     * const encargados = await prisma.encargados.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EncargadosFindFirstArgs>(args?: SelectSubset<T, EncargadosFindFirstArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Encargados that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosFindFirstOrThrowArgs} args - Arguments to find a Encargados
+     * @example
+     * // Get one Encargados
+     * const encargados = await prisma.encargados.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EncargadosFindFirstOrThrowArgs>(args?: SelectSubset<T, EncargadosFindFirstOrThrowArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Encargados that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Encargados
+     * const encargados = await prisma.encargados.findMany()
+     * 
+     * // Get first 10 Encargados
+     * const encargados = await prisma.encargados.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const encargadosWithIdOnly = await prisma.encargados.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EncargadosFindManyArgs>(args?: SelectSubset<T, EncargadosFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Encargados.
+     * @param {EncargadosCreateArgs} args - Arguments to create a Encargados.
+     * @example
+     * // Create one Encargados
+     * const Encargados = await prisma.encargados.create({
+     *   data: {
+     *     // ... data to create a Encargados
+     *   }
+     * })
+     * 
+     */
+    create<T extends EncargadosCreateArgs>(args: SelectSubset<T, EncargadosCreateArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Encargados.
+     * @param {EncargadosCreateManyArgs} args - Arguments to create many Encargados.
+     * @example
+     * // Create many Encargados
+     * const encargados = await prisma.encargados.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EncargadosCreateManyArgs>(args?: SelectSubset<T, EncargadosCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Encargados and returns the data saved in the database.
+     * @param {EncargadosCreateManyAndReturnArgs} args - Arguments to create many Encargados.
+     * @example
+     * // Create many Encargados
+     * const encargados = await prisma.encargados.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Encargados and only return the `id`
+     * const encargadosWithIdOnly = await prisma.encargados.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EncargadosCreateManyAndReturnArgs>(args?: SelectSubset<T, EncargadosCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Encargados.
+     * @param {EncargadosDeleteArgs} args - Arguments to delete one Encargados.
+     * @example
+     * // Delete one Encargados
+     * const Encargados = await prisma.encargados.delete({
+     *   where: {
+     *     // ... filter to delete one Encargados
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EncargadosDeleteArgs>(args: SelectSubset<T, EncargadosDeleteArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Encargados.
+     * @param {EncargadosUpdateArgs} args - Arguments to update one Encargados.
+     * @example
+     * // Update one Encargados
+     * const encargados = await prisma.encargados.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EncargadosUpdateArgs>(args: SelectSubset<T, EncargadosUpdateArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Encargados.
+     * @param {EncargadosDeleteManyArgs} args - Arguments to filter Encargados to delete.
+     * @example
+     * // Delete a few Encargados
+     * const { count } = await prisma.encargados.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EncargadosDeleteManyArgs>(args?: SelectSubset<T, EncargadosDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Encargados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Encargados
+     * const encargados = await prisma.encargados.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EncargadosUpdateManyArgs>(args: SelectSubset<T, EncargadosUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Encargados and returns the data updated in the database.
+     * @param {EncargadosUpdateManyAndReturnArgs} args - Arguments to update many Encargados.
+     * @example
+     * // Update many Encargados
+     * const encargados = await prisma.encargados.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Encargados and only return the `id`
+     * const encargadosWithIdOnly = await prisma.encargados.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EncargadosUpdateManyAndReturnArgs>(args: SelectSubset<T, EncargadosUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Encargados.
+     * @param {EncargadosUpsertArgs} args - Arguments to update or create a Encargados.
+     * @example
+     * // Update or create a Encargados
+     * const encargados = await prisma.encargados.upsert({
+     *   create: {
+     *     // ... data to create a Encargados
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Encargados we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EncargadosUpsertArgs>(args: SelectSubset<T, EncargadosUpsertArgs<ExtArgs>>): Prisma__EncargadosClient<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Encargados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosCountArgs} args - Arguments to filter Encargados to count.
+     * @example
+     * // Count the number of Encargados
+     * const count = await prisma.encargados.count({
+     *   where: {
+     *     // ... the filter for the Encargados we want to count
+     *   }
+     * })
+    **/
+    count<T extends EncargadosCountArgs>(
+      args?: Subset<T, EncargadosCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EncargadosCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Encargados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EncargadosAggregateArgs>(args: Subset<T, EncargadosAggregateArgs>): Prisma.PrismaPromise<GetEncargadosAggregateType<T>>
+
+    /**
+     * Group by Encargados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EncargadosGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EncargadosGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EncargadosGroupByArgs['orderBy'] }
+        : { orderBy?: EncargadosGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EncargadosGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEncargadosGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Encargados model
+   */
+  readonly fields: EncargadosFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Encargados.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EncargadosClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    terreno<T extends TerrenoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TerrenoDefaultArgs<ExtArgs>>): Prisma__TerrenoClient<$Result.GetResult<Prisma.$TerrenoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Encargados model
+   */
+  interface EncargadosFieldRefs {
+    readonly id: FieldRef<"Encargados", 'String'>
+    readonly userFundoId: FieldRef<"Encargados", 'String'>
+    readonly terrenoId: FieldRef<"Encargados", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Encargados findUnique
+   */
+  export type EncargadosFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter, which Encargados to fetch.
+     */
+    where: EncargadosWhereUniqueInput
+  }
+
+  /**
+   * Encargados findUniqueOrThrow
+   */
+  export type EncargadosFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter, which Encargados to fetch.
+     */
+    where: EncargadosWhereUniqueInput
+  }
+
+  /**
+   * Encargados findFirst
+   */
+  export type EncargadosFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter, which Encargados to fetch.
+     */
+    where?: EncargadosWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Encargados to fetch.
+     */
+    orderBy?: EncargadosOrderByWithRelationInput | EncargadosOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Encargados.
+     */
+    cursor?: EncargadosWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Encargados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Encargados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Encargados.
+     */
+    distinct?: EncargadosScalarFieldEnum | EncargadosScalarFieldEnum[]
+  }
+
+  /**
+   * Encargados findFirstOrThrow
+   */
+  export type EncargadosFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter, which Encargados to fetch.
+     */
+    where?: EncargadosWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Encargados to fetch.
+     */
+    orderBy?: EncargadosOrderByWithRelationInput | EncargadosOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Encargados.
+     */
+    cursor?: EncargadosWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Encargados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Encargados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Encargados.
+     */
+    distinct?: EncargadosScalarFieldEnum | EncargadosScalarFieldEnum[]
+  }
+
+  /**
+   * Encargados findMany
+   */
+  export type EncargadosFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter, which Encargados to fetch.
+     */
+    where?: EncargadosWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Encargados to fetch.
+     */
+    orderBy?: EncargadosOrderByWithRelationInput | EncargadosOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Encargados.
+     */
+    cursor?: EncargadosWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Encargados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Encargados.
+     */
+    skip?: number
+    distinct?: EncargadosScalarFieldEnum | EncargadosScalarFieldEnum[]
+  }
+
+  /**
+   * Encargados create
+   */
+  export type EncargadosCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Encargados.
+     */
+    data: XOR<EncargadosCreateInput, EncargadosUncheckedCreateInput>
+  }
+
+  /**
+   * Encargados createMany
+   */
+  export type EncargadosCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Encargados.
+     */
+    data: EncargadosCreateManyInput | EncargadosCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Encargados createManyAndReturn
+   */
+  export type EncargadosCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * The data used to create many Encargados.
+     */
+    data: EncargadosCreateManyInput | EncargadosCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Encargados update
+   */
+  export type EncargadosUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Encargados.
+     */
+    data: XOR<EncargadosUpdateInput, EncargadosUncheckedUpdateInput>
+    /**
+     * Choose, which Encargados to update.
+     */
+    where: EncargadosWhereUniqueInput
+  }
+
+  /**
+   * Encargados updateMany
+   */
+  export type EncargadosUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Encargados.
+     */
+    data: XOR<EncargadosUpdateManyMutationInput, EncargadosUncheckedUpdateManyInput>
+    /**
+     * Filter which Encargados to update
+     */
+    where?: EncargadosWhereInput
+    /**
+     * Limit how many Encargados to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Encargados updateManyAndReturn
+   */
+  export type EncargadosUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * The data used to update Encargados.
+     */
+    data: XOR<EncargadosUpdateManyMutationInput, EncargadosUncheckedUpdateManyInput>
+    /**
+     * Filter which Encargados to update
+     */
+    where?: EncargadosWhereInput
+    /**
+     * Limit how many Encargados to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Encargados upsert
+   */
+  export type EncargadosUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Encargados to update in case it exists.
+     */
+    where: EncargadosWhereUniqueInput
+    /**
+     * In case the Encargados found by the `where` argument doesn't exist, create a new Encargados with this data.
+     */
+    create: XOR<EncargadosCreateInput, EncargadosUncheckedCreateInput>
+    /**
+     * In case the Encargados was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EncargadosUpdateInput, EncargadosUncheckedUpdateInput>
+  }
+
+  /**
+   * Encargados delete
+   */
+  export type EncargadosDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    /**
+     * Filter which Encargados to delete.
+     */
+    where: EncargadosWhereUniqueInput
+  }
+
+  /**
+   * Encargados deleteMany
+   */
+  export type EncargadosDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Encargados to delete
+     */
+    where?: EncargadosWhereInput
+    /**
+     * Limit how many Encargados to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Encargados without action
+   */
+  export type EncargadosDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Terreno
    */
 
@@ -6780,6 +7967,7 @@ export namespace Prisma {
     codeSagGrower?: boolean
     userFundoId?: boolean
     userFundo?: boolean | UserFundoDefaultArgs<ExtArgs>
+    encargados?: boolean | Terreno$encargadosArgs<ExtArgs>
     cuarteles?: boolean | Terreno$cuartelesArgs<ExtArgs>
     _count?: boolean | TerrenoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["terreno"]>
@@ -6825,6 +8013,7 @@ export namespace Prisma {
   export type TerrenoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "areaHectareas" | "createdAt" | "updatedAt" | "creadoPor" | "lat" | "lon" | "codeSagGrower" | "userFundoId", ExtArgs["result"]["terreno"]>
   export type TerrenoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userFundo?: boolean | UserFundoDefaultArgs<ExtArgs>
+    encargados?: boolean | Terreno$encargadosArgs<ExtArgs>
     cuarteles?: boolean | Terreno$cuartelesArgs<ExtArgs>
     _count?: boolean | TerrenoCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -6839,6 +8028,7 @@ export namespace Prisma {
     name: "Terreno"
     objects: {
       userFundo: Prisma.$UserFundoPayload<ExtArgs>
+      encargados: Prisma.$EncargadosPayload<ExtArgs>[]
       cuarteles: Prisma.$cuartelPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -7246,6 +8436,7 @@ export namespace Prisma {
   export interface Prisma__TerrenoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userFundo<T extends UserFundoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserFundoDefaultArgs<ExtArgs>>): Prisma__UserFundoClient<$Result.GetResult<Prisma.$UserFundoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    encargados<T extends Terreno$encargadosArgs<ExtArgs> = {}>(args?: Subset<T, Terreno$encargadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EncargadosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cuarteles<T extends Terreno$cuartelesArgs<ExtArgs> = {}>(args?: Subset<T, Terreno$cuartelesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$cuartelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7678,6 +8869,30 @@ export namespace Prisma {
      * Limit how many Terrenos to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Terreno.encargados
+   */
+  export type Terreno$encargadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Encargados
+     */
+    select?: EncargadosSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Encargados
+     */
+    omit?: EncargadosOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EncargadosInclude<ExtArgs> | null
+    where?: EncargadosWhereInput
+    orderBy?: EncargadosOrderByWithRelationInput | EncargadosOrderByWithRelationInput[]
+    cursor?: EncargadosWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EncargadosScalarFieldEnum | EncargadosScalarFieldEnum[]
   }
 
   /**
@@ -15730,6 +16945,15 @@ export namespace Prisma {
   export type UserFundoScalarFieldEnum = (typeof UserFundoScalarFieldEnum)[keyof typeof UserFundoScalarFieldEnum]
 
 
+  export const EncargadosScalarFieldEnum: {
+    id: 'id',
+    userFundoId: 'userFundoId',
+    terrenoId: 'terrenoId'
+  };
+
+  export type EncargadosScalarFieldEnum = (typeof EncargadosScalarFieldEnum)[keyof typeof EncargadosScalarFieldEnum]
+
+
   export const TerrenoScalarFieldEnum: {
     id: 'id',
     areaHectareas: 'areaHectareas',
@@ -15948,6 +17172,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     userFundos?: UserFundoListRelationFilter
+    fundosCreados?: FundoListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -15960,6 +17185,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userFundos?: UserFundoOrderByRelationAggregateInput
+    fundosCreados?: FundoOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -15975,6 +17201,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     userFundos?: UserFundoListRelationFilter
+    fundosCreados?: FundoListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16061,6 +17288,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Fundo"> | Date | string
     updatedAt?: DateTimeFilter<"Fundo"> | Date | string
     creadoPor?: StringFilter<"Fundo"> | string
+    creadopor?: XOR<UserScalarRelationFilter, UserWhereInput>
     userFundos?: UserFundoListRelationFilter
   }
 
@@ -16072,6 +17300,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     creadoPor?: SortOrder
+    creadopor?: UserOrderByWithRelationInput
     userFundos?: UserFundoOrderByRelationAggregateInput
   }
 
@@ -16086,6 +17315,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Fundo"> | Date | string
     updatedAt?: DateTimeFilter<"Fundo"> | Date | string
     creadoPor?: StringFilter<"Fundo"> | string
+    creadopor?: XOR<UserScalarRelationFilter, UserWhereInput>
     userFundos?: UserFundoListRelationFilter
   }, "id" | "rut">
 
@@ -16179,6 +17409,51 @@ export namespace Prisma {
     rolId?: StringWithAggregatesFilter<"UserFundo"> | string
   }
 
+  export type EncargadosWhereInput = {
+    AND?: EncargadosWhereInput | EncargadosWhereInput[]
+    OR?: EncargadosWhereInput[]
+    NOT?: EncargadosWhereInput | EncargadosWhereInput[]
+    id?: StringFilter<"Encargados"> | string
+    userFundoId?: StringFilter<"Encargados"> | string
+    terrenoId?: StringFilter<"Encargados"> | string
+    terreno?: XOR<TerrenoScalarRelationFilter, TerrenoWhereInput>
+  }
+
+  export type EncargadosOrderByWithRelationInput = {
+    id?: SortOrder
+    userFundoId?: SortOrder
+    terrenoId?: SortOrder
+    terreno?: TerrenoOrderByWithRelationInput
+  }
+
+  export type EncargadosWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EncargadosWhereInput | EncargadosWhereInput[]
+    OR?: EncargadosWhereInput[]
+    NOT?: EncargadosWhereInput | EncargadosWhereInput[]
+    userFundoId?: StringFilter<"Encargados"> | string
+    terrenoId?: StringFilter<"Encargados"> | string
+    terreno?: XOR<TerrenoScalarRelationFilter, TerrenoWhereInput>
+  }, "id">
+
+  export type EncargadosOrderByWithAggregationInput = {
+    id?: SortOrder
+    userFundoId?: SortOrder
+    terrenoId?: SortOrder
+    _count?: EncargadosCountOrderByAggregateInput
+    _max?: EncargadosMaxOrderByAggregateInput
+    _min?: EncargadosMinOrderByAggregateInput
+  }
+
+  export type EncargadosScalarWhereWithAggregatesInput = {
+    AND?: EncargadosScalarWhereWithAggregatesInput | EncargadosScalarWhereWithAggregatesInput[]
+    OR?: EncargadosScalarWhereWithAggregatesInput[]
+    NOT?: EncargadosScalarWhereWithAggregatesInput | EncargadosScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Encargados"> | string
+    userFundoId?: StringWithAggregatesFilter<"Encargados"> | string
+    terrenoId?: StringWithAggregatesFilter<"Encargados"> | string
+  }
+
   export type TerrenoWhereInput = {
     AND?: TerrenoWhereInput | TerrenoWhereInput[]
     OR?: TerrenoWhereInput[]
@@ -16193,6 +17468,7 @@ export namespace Prisma {
     codeSagGrower?: StringFilter<"Terreno"> | string
     userFundoId?: StringFilter<"Terreno"> | string
     userFundo?: XOR<UserFundoScalarRelationFilter, UserFundoWhereInput>
+    encargados?: EncargadosListRelationFilter
     cuarteles?: CuartelListRelationFilter
   }
 
@@ -16207,6 +17483,7 @@ export namespace Prisma {
     codeSagGrower?: SortOrder
     userFundoId?: SortOrder
     userFundo?: UserFundoOrderByWithRelationInput
+    encargados?: EncargadosOrderByRelationAggregateInput
     cuarteles?: cuartelOrderByRelationAggregateInput
   }
 
@@ -16224,6 +17501,7 @@ export namespace Prisma {
     codeSagGrower?: StringFilter<"Terreno"> | string
     userFundoId?: StringFilter<"Terreno"> | string
     userFundo?: XOR<UserFundoScalarRelationFilter, UserFundoWhereInput>
+    encargados?: EncargadosListRelationFilter
     cuarteles?: CuartelListRelationFilter
   }, "id">
 
@@ -16774,6 +18052,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userFundos?: UserFundoCreateNestedManyWithoutUserInput
+    fundosCreados?: FundoCreateNestedManyWithoutCreadoporInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -16786,6 +18065,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userFundos?: UserFundoUncheckedCreateNestedManyWithoutUserInput
+    fundosCreados?: FundoUncheckedCreateNestedManyWithoutCreadoporInput
   }
 
   export type UserUpdateInput = {
@@ -16798,6 +18078,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userFundos?: UserFundoUpdateManyWithoutUserNestedInput
+    fundosCreados?: FundoUpdateManyWithoutCreadoporNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -16810,6 +18091,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userFundos?: UserFundoUncheckedUpdateManyWithoutUserNestedInput
+    fundosCreados?: FundoUncheckedUpdateManyWithoutCreadoporNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -16898,7 +18180,7 @@ export namespace Prisma {
     rut: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    creadoPor: string
+    creadopor: UserCreateNestedOneWithoutFundosCreadosInput
     userFundos?: UserFundoCreateNestedManyWithoutFundoInput
   }
 
@@ -16920,7 +18202,7 @@ export namespace Prisma {
     rut?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creadoPor?: StringFieldUpdateOperationsInput | string
+    creadopor?: UserUpdateOneRequiredWithoutFundosCreadosNestedInput
     userFundos?: UserFundoUpdateManyWithoutFundoNestedInput
   }
 
@@ -16952,7 +18234,6 @@ export namespace Prisma {
     rut?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creadoPor?: StringFieldUpdateOperationsInput | string
   }
 
   export type FundoUncheckedUpdateManyInput = {
@@ -17022,6 +18303,47 @@ export namespace Prisma {
     rolId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EncargadosCreateInput = {
+    id?: string
+    userFundoId: string
+    terreno: TerrenoCreateNestedOneWithoutEncargadosInput
+  }
+
+  export type EncargadosUncheckedCreateInput = {
+    id?: string
+    userFundoId: string
+    terrenoId: string
+  }
+
+  export type EncargadosUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+    terreno?: TerrenoUpdateOneRequiredWithoutEncargadosNestedInput
+  }
+
+  export type EncargadosUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+    terrenoId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EncargadosCreateManyInput = {
+    id?: string
+    userFundoId: string
+    terrenoId: string
+  }
+
+  export type EncargadosUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EncargadosUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+    terrenoId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TerrenoCreateInput = {
     id?: string
     areaHectareas: number
@@ -17032,6 +18354,7 @@ export namespace Prisma {
     lon: number
     codeSagGrower: string
     userFundo: UserFundoCreateNestedOneWithoutTerrenosInput
+    encargados?: EncargadosCreateNestedManyWithoutTerrenoInput
     cuarteles?: cuartelCreateNestedManyWithoutTerrenoInput
   }
 
@@ -17045,6 +18368,7 @@ export namespace Prisma {
     lon: number
     codeSagGrower: string
     userFundoId: string
+    encargados?: EncargadosUncheckedCreateNestedManyWithoutTerrenoInput
     cuarteles?: cuartelUncheckedCreateNestedManyWithoutTerrenoInput
   }
 
@@ -17058,6 +18382,7 @@ export namespace Prisma {
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
     userFundo?: UserFundoUpdateOneRequiredWithoutTerrenosNestedInput
+    encargados?: EncargadosUpdateManyWithoutTerrenoNestedInput
     cuarteles?: cuartelUpdateManyWithoutTerrenoNestedInput
   }
 
@@ -17071,6 +18396,7 @@ export namespace Prisma {
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
     userFundoId?: StringFieldUpdateOperationsInput | string
+    encargados?: EncargadosUncheckedUpdateManyWithoutTerrenoNestedInput
     cuarteles?: cuartelUncheckedUpdateManyWithoutTerrenoNestedInput
   }
 
@@ -17684,7 +19010,17 @@ export namespace Prisma {
     none?: UserFundoWhereInput
   }
 
+  export type FundoListRelationFilter = {
+    every?: FundoWhereInput
+    some?: FundoWhereInput
+    none?: FundoWhereInput
+  }
+
   export type UserFundoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FundoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17817,6 +19153,11 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type FundoCountOrderByAggregateInput = {
     id?: SortOrder
     nombre?: SortOrder
@@ -17850,11 +19191,6 @@ export namespace Prisma {
   export type FundoScalarRelationFilter = {
     is?: FundoWhereInput
     isNot?: FundoWhereInput
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type RolScalarRelationFilter = {
@@ -17896,6 +19232,29 @@ export namespace Prisma {
     rolId?: SortOrder
   }
 
+  export type TerrenoScalarRelationFilter = {
+    is?: TerrenoWhereInput
+    isNot?: TerrenoWhereInput
+  }
+
+  export type EncargadosCountOrderByAggregateInput = {
+    id?: SortOrder
+    userFundoId?: SortOrder
+    terrenoId?: SortOrder
+  }
+
+  export type EncargadosMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userFundoId?: SortOrder
+    terrenoId?: SortOrder
+  }
+
+  export type EncargadosMinOrderByAggregateInput = {
+    id?: SortOrder
+    userFundoId?: SortOrder
+    terrenoId?: SortOrder
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -17912,10 +19271,20 @@ export namespace Prisma {
     isNot?: UserFundoWhereInput
   }
 
+  export type EncargadosListRelationFilter = {
+    every?: EncargadosWhereInput
+    some?: EncargadosWhereInput
+    none?: EncargadosWhereInput
+  }
+
   export type CuartelListRelationFilter = {
     every?: cuartelWhereInput
     some?: cuartelWhereInput
     none?: cuartelWhereInput
+  }
+
+  export type EncargadosOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type cuartelOrderByRelationAggregateInput = {
@@ -18092,11 +19461,6 @@ export namespace Prisma {
   export type SueloScalarRelationFilter = {
     is?: SueloWhereInput
     isNot?: SueloWhereInput
-  }
-
-  export type TerrenoScalarRelationFilter = {
-    is?: TerrenoWhereInput
-    isNot?: TerrenoWhereInput
   }
 
   export type TareaListRelationFilter = {
@@ -18336,11 +19700,25 @@ export namespace Prisma {
     connect?: UserFundoWhereUniqueInput | UserFundoWhereUniqueInput[]
   }
 
+  export type FundoCreateNestedManyWithoutCreadoporInput = {
+    create?: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput> | FundoCreateWithoutCreadoporInput[] | FundoUncheckedCreateWithoutCreadoporInput[]
+    connectOrCreate?: FundoCreateOrConnectWithoutCreadoporInput | FundoCreateOrConnectWithoutCreadoporInput[]
+    createMany?: FundoCreateManyCreadoporInputEnvelope
+    connect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+  }
+
   export type UserFundoUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserFundoCreateWithoutUserInput, UserFundoUncheckedCreateWithoutUserInput> | UserFundoCreateWithoutUserInput[] | UserFundoUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserFundoCreateOrConnectWithoutUserInput | UserFundoCreateOrConnectWithoutUserInput[]
     createMany?: UserFundoCreateManyUserInputEnvelope
     connect?: UserFundoWhereUniqueInput | UserFundoWhereUniqueInput[]
+  }
+
+  export type FundoUncheckedCreateNestedManyWithoutCreadoporInput = {
+    create?: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput> | FundoCreateWithoutCreadoporInput[] | FundoUncheckedCreateWithoutCreadoporInput[]
+    connectOrCreate?: FundoCreateOrConnectWithoutCreadoporInput | FundoCreateOrConnectWithoutCreadoporInput[]
+    createMany?: FundoCreateManyCreadoporInputEnvelope
+    connect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18369,6 +19747,20 @@ export namespace Prisma {
     deleteMany?: UserFundoScalarWhereInput | UserFundoScalarWhereInput[]
   }
 
+  export type FundoUpdateManyWithoutCreadoporNestedInput = {
+    create?: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput> | FundoCreateWithoutCreadoporInput[] | FundoUncheckedCreateWithoutCreadoporInput[]
+    connectOrCreate?: FundoCreateOrConnectWithoutCreadoporInput | FundoCreateOrConnectWithoutCreadoporInput[]
+    upsert?: FundoUpsertWithWhereUniqueWithoutCreadoporInput | FundoUpsertWithWhereUniqueWithoutCreadoporInput[]
+    createMany?: FundoCreateManyCreadoporInputEnvelope
+    set?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    disconnect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    delete?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    connect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    update?: FundoUpdateWithWhereUniqueWithoutCreadoporInput | FundoUpdateWithWhereUniqueWithoutCreadoporInput[]
+    updateMany?: FundoUpdateManyWithWhereWithoutCreadoporInput | FundoUpdateManyWithWhereWithoutCreadoporInput[]
+    deleteMany?: FundoScalarWhereInput | FundoScalarWhereInput[]
+  }
+
   export type UserFundoUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserFundoCreateWithoutUserInput, UserFundoUncheckedCreateWithoutUserInput> | UserFundoCreateWithoutUserInput[] | UserFundoUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserFundoCreateOrConnectWithoutUserInput | UserFundoCreateOrConnectWithoutUserInput[]
@@ -18381,6 +19773,20 @@ export namespace Prisma {
     update?: UserFundoUpdateWithWhereUniqueWithoutUserInput | UserFundoUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserFundoUpdateManyWithWhereWithoutUserInput | UserFundoUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserFundoScalarWhereInput | UserFundoScalarWhereInput[]
+  }
+
+  export type FundoUncheckedUpdateManyWithoutCreadoporNestedInput = {
+    create?: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput> | FundoCreateWithoutCreadoporInput[] | FundoUncheckedCreateWithoutCreadoporInput[]
+    connectOrCreate?: FundoCreateOrConnectWithoutCreadoporInput | FundoCreateOrConnectWithoutCreadoporInput[]
+    upsert?: FundoUpsertWithWhereUniqueWithoutCreadoporInput | FundoUpsertWithWhereUniqueWithoutCreadoporInput[]
+    createMany?: FundoCreateManyCreadoporInputEnvelope
+    set?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    disconnect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    delete?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    connect?: FundoWhereUniqueInput | FundoWhereUniqueInput[]
+    update?: FundoUpdateWithWhereUniqueWithoutCreadoporInput | FundoUpdateWithWhereUniqueWithoutCreadoporInput[]
+    updateMany?: FundoUpdateManyWithWhereWithoutCreadoporInput | FundoUpdateManyWithWhereWithoutCreadoporInput[]
+    deleteMany?: FundoScalarWhereInput | FundoScalarWhereInput[]
   }
 
   export type UserFundoCreateNestedManyWithoutRolInput = {
@@ -18429,6 +19835,12 @@ export namespace Prisma {
     deleteMany?: UserFundoScalarWhereInput | UserFundoScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutFundosCreadosInput = {
+    create?: XOR<UserCreateWithoutFundosCreadosInput, UserUncheckedCreateWithoutFundosCreadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFundosCreadosInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type UserFundoCreateNestedManyWithoutFundoInput = {
     create?: XOR<UserFundoCreateWithoutFundoInput, UserFundoUncheckedCreateWithoutFundoInput> | UserFundoCreateWithoutFundoInput[] | UserFundoUncheckedCreateWithoutFundoInput[]
     connectOrCreate?: UserFundoCreateOrConnectWithoutFundoInput | UserFundoCreateOrConnectWithoutFundoInput[]
@@ -18441,6 +19853,14 @@ export namespace Prisma {
     connectOrCreate?: UserFundoCreateOrConnectWithoutFundoInput | UserFundoCreateOrConnectWithoutFundoInput[]
     createMany?: UserFundoCreateManyFundoInputEnvelope
     connect?: UserFundoWhereUniqueInput | UserFundoWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutFundosCreadosNestedInput = {
+    create?: XOR<UserCreateWithoutFundosCreadosInput, UserUncheckedCreateWithoutFundosCreadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFundosCreadosInput
+    upsert?: UserUpsertWithoutFundosCreadosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFundosCreadosInput, UserUpdateWithoutFundosCreadosInput>, UserUncheckedUpdateWithoutFundosCreadosInput>
   }
 
   export type UserFundoUpdateManyWithoutFundoNestedInput = {
@@ -18555,10 +19975,31 @@ export namespace Prisma {
     deleteMany?: TerrenoScalarWhereInput | TerrenoScalarWhereInput[]
   }
 
+  export type TerrenoCreateNestedOneWithoutEncargadosInput = {
+    create?: XOR<TerrenoCreateWithoutEncargadosInput, TerrenoUncheckedCreateWithoutEncargadosInput>
+    connectOrCreate?: TerrenoCreateOrConnectWithoutEncargadosInput
+    connect?: TerrenoWhereUniqueInput
+  }
+
+  export type TerrenoUpdateOneRequiredWithoutEncargadosNestedInput = {
+    create?: XOR<TerrenoCreateWithoutEncargadosInput, TerrenoUncheckedCreateWithoutEncargadosInput>
+    connectOrCreate?: TerrenoCreateOrConnectWithoutEncargadosInput
+    upsert?: TerrenoUpsertWithoutEncargadosInput
+    connect?: TerrenoWhereUniqueInput
+    update?: XOR<XOR<TerrenoUpdateToOneWithWhereWithoutEncargadosInput, TerrenoUpdateWithoutEncargadosInput>, TerrenoUncheckedUpdateWithoutEncargadosInput>
+  }
+
   export type UserFundoCreateNestedOneWithoutTerrenosInput = {
     create?: XOR<UserFundoCreateWithoutTerrenosInput, UserFundoUncheckedCreateWithoutTerrenosInput>
     connectOrCreate?: UserFundoCreateOrConnectWithoutTerrenosInput
     connect?: UserFundoWhereUniqueInput
+  }
+
+  export type EncargadosCreateNestedManyWithoutTerrenoInput = {
+    create?: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput> | EncargadosCreateWithoutTerrenoInput[] | EncargadosUncheckedCreateWithoutTerrenoInput[]
+    connectOrCreate?: EncargadosCreateOrConnectWithoutTerrenoInput | EncargadosCreateOrConnectWithoutTerrenoInput[]
+    createMany?: EncargadosCreateManyTerrenoInputEnvelope
+    connect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
   }
 
   export type cuartelCreateNestedManyWithoutTerrenoInput = {
@@ -18566,6 +20007,13 @@ export namespace Prisma {
     connectOrCreate?: cuartelCreateOrConnectWithoutTerrenoInput | cuartelCreateOrConnectWithoutTerrenoInput[]
     createMany?: cuartelCreateManyTerrenoInputEnvelope
     connect?: cuartelWhereUniqueInput | cuartelWhereUniqueInput[]
+  }
+
+  export type EncargadosUncheckedCreateNestedManyWithoutTerrenoInput = {
+    create?: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput> | EncargadosCreateWithoutTerrenoInput[] | EncargadosUncheckedCreateWithoutTerrenoInput[]
+    connectOrCreate?: EncargadosCreateOrConnectWithoutTerrenoInput | EncargadosCreateOrConnectWithoutTerrenoInput[]
+    createMany?: EncargadosCreateManyTerrenoInputEnvelope
+    connect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
   }
 
   export type cuartelUncheckedCreateNestedManyWithoutTerrenoInput = {
@@ -18591,6 +20039,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserFundoUpdateToOneWithWhereWithoutTerrenosInput, UserFundoUpdateWithoutTerrenosInput>, UserFundoUncheckedUpdateWithoutTerrenosInput>
   }
 
+  export type EncargadosUpdateManyWithoutTerrenoNestedInput = {
+    create?: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput> | EncargadosCreateWithoutTerrenoInput[] | EncargadosUncheckedCreateWithoutTerrenoInput[]
+    connectOrCreate?: EncargadosCreateOrConnectWithoutTerrenoInput | EncargadosCreateOrConnectWithoutTerrenoInput[]
+    upsert?: EncargadosUpsertWithWhereUniqueWithoutTerrenoInput | EncargadosUpsertWithWhereUniqueWithoutTerrenoInput[]
+    createMany?: EncargadosCreateManyTerrenoInputEnvelope
+    set?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    disconnect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    delete?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    connect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    update?: EncargadosUpdateWithWhereUniqueWithoutTerrenoInput | EncargadosUpdateWithWhereUniqueWithoutTerrenoInput[]
+    updateMany?: EncargadosUpdateManyWithWhereWithoutTerrenoInput | EncargadosUpdateManyWithWhereWithoutTerrenoInput[]
+    deleteMany?: EncargadosScalarWhereInput | EncargadosScalarWhereInput[]
+  }
+
   export type cuartelUpdateManyWithoutTerrenoNestedInput = {
     create?: XOR<cuartelCreateWithoutTerrenoInput, cuartelUncheckedCreateWithoutTerrenoInput> | cuartelCreateWithoutTerrenoInput[] | cuartelUncheckedCreateWithoutTerrenoInput[]
     connectOrCreate?: cuartelCreateOrConnectWithoutTerrenoInput | cuartelCreateOrConnectWithoutTerrenoInput[]
@@ -18603,6 +20065,20 @@ export namespace Prisma {
     update?: cuartelUpdateWithWhereUniqueWithoutTerrenoInput | cuartelUpdateWithWhereUniqueWithoutTerrenoInput[]
     updateMany?: cuartelUpdateManyWithWhereWithoutTerrenoInput | cuartelUpdateManyWithWhereWithoutTerrenoInput[]
     deleteMany?: cuartelScalarWhereInput | cuartelScalarWhereInput[]
+  }
+
+  export type EncargadosUncheckedUpdateManyWithoutTerrenoNestedInput = {
+    create?: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput> | EncargadosCreateWithoutTerrenoInput[] | EncargadosUncheckedCreateWithoutTerrenoInput[]
+    connectOrCreate?: EncargadosCreateOrConnectWithoutTerrenoInput | EncargadosCreateOrConnectWithoutTerrenoInput[]
+    upsert?: EncargadosUpsertWithWhereUniqueWithoutTerrenoInput | EncargadosUpsertWithWhereUniqueWithoutTerrenoInput[]
+    createMany?: EncargadosCreateManyTerrenoInputEnvelope
+    set?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    disconnect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    delete?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    connect?: EncargadosWhereUniqueInput | EncargadosWhereUniqueInput[]
+    update?: EncargadosUpdateWithWhereUniqueWithoutTerrenoInput | EncargadosUpdateWithWhereUniqueWithoutTerrenoInput[]
+    updateMany?: EncargadosUpdateManyWithWhereWithoutTerrenoInput | EncargadosUpdateManyWithWhereWithoutTerrenoInput[]
+    deleteMany?: EncargadosScalarWhereInput | EncargadosScalarWhereInput[]
   }
 
   export type cuartelUncheckedUpdateManyWithoutTerrenoNestedInput = {
@@ -19224,6 +20700,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FundoCreateWithoutCreadoporInput = {
+    id?: string
+    nombre: string
+    direccion: string
+    rut: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userFundos?: UserFundoCreateNestedManyWithoutFundoInput
+  }
+
+  export type FundoUncheckedCreateWithoutCreadoporInput = {
+    id?: string
+    nombre: string
+    direccion: string
+    rut: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userFundos?: UserFundoUncheckedCreateNestedManyWithoutFundoInput
+  }
+
+  export type FundoCreateOrConnectWithoutCreadoporInput = {
+    where: FundoWhereUniqueInput
+    create: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput>
+  }
+
+  export type FundoCreateManyCreadoporInputEnvelope = {
+    data: FundoCreateManyCreadoporInput | FundoCreateManyCreadoporInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserFundoUpsertWithWhereUniqueWithoutUserInput = {
     where: UserFundoWhereUniqueInput
     update: XOR<UserFundoUpdateWithoutUserInput, UserFundoUncheckedUpdateWithoutUserInput>
@@ -19249,6 +20755,35 @@ export namespace Prisma {
     fundoId?: StringFilter<"UserFundo"> | string
     assignedAt?: DateTimeFilter<"UserFundo"> | Date | string
     rolId?: StringFilter<"UserFundo"> | string
+  }
+
+  export type FundoUpsertWithWhereUniqueWithoutCreadoporInput = {
+    where: FundoWhereUniqueInput
+    update: XOR<FundoUpdateWithoutCreadoporInput, FundoUncheckedUpdateWithoutCreadoporInput>
+    create: XOR<FundoCreateWithoutCreadoporInput, FundoUncheckedCreateWithoutCreadoporInput>
+  }
+
+  export type FundoUpdateWithWhereUniqueWithoutCreadoporInput = {
+    where: FundoWhereUniqueInput
+    data: XOR<FundoUpdateWithoutCreadoporInput, FundoUncheckedUpdateWithoutCreadoporInput>
+  }
+
+  export type FundoUpdateManyWithWhereWithoutCreadoporInput = {
+    where: FundoScalarWhereInput
+    data: XOR<FundoUpdateManyMutationInput, FundoUncheckedUpdateManyWithoutCreadoporInput>
+  }
+
+  export type FundoScalarWhereInput = {
+    AND?: FundoScalarWhereInput | FundoScalarWhereInput[]
+    OR?: FundoScalarWhereInput[]
+    NOT?: FundoScalarWhereInput | FundoScalarWhereInput[]
+    id?: StringFilter<"Fundo"> | string
+    nombre?: StringFilter<"Fundo"> | string
+    direccion?: StringFilter<"Fundo"> | string
+    rut?: StringFilter<"Fundo"> | string
+    createdAt?: DateTimeFilter<"Fundo"> | Date | string
+    updatedAt?: DateTimeFilter<"Fundo"> | Date | string
+    creadoPor?: StringFilter<"Fundo"> | string
   }
 
   export type UserFundoCreateWithoutRolInput = {
@@ -19293,6 +20828,35 @@ export namespace Prisma {
     data: XOR<UserFundoUpdateManyMutationInput, UserFundoUncheckedUpdateManyWithoutRolInput>
   }
 
+  export type UserCreateWithoutFundosCreadosInput = {
+    id?: string
+    nombre: string
+    apellido: string
+    email: string
+    password: string
+    emailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userFundos?: UserFundoCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFundosCreadosInput = {
+    id?: string
+    nombre: string
+    apellido: string
+    email: string
+    password: string
+    emailVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userFundos?: UserFundoUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFundosCreadosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFundosCreadosInput, UserUncheckedCreateWithoutFundosCreadosInput>
+  }
+
   export type UserFundoCreateWithoutFundoInput = {
     id?: string
     assignedAt?: Date | string
@@ -19319,6 +20883,41 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserUpsertWithoutFundosCreadosInput = {
+    update: XOR<UserUpdateWithoutFundosCreadosInput, UserUncheckedUpdateWithoutFundosCreadosInput>
+    create: XOR<UserCreateWithoutFundosCreadosInput, UserUncheckedCreateWithoutFundosCreadosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFundosCreadosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFundosCreadosInput, UserUncheckedUpdateWithoutFundosCreadosInput>
+  }
+
+  export type UserUpdateWithoutFundosCreadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    apellido?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFundos?: UserFundoUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFundosCreadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    apellido?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFundos?: UserFundoUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserFundoUpsertWithWhereUniqueWithoutFundoInput = {
     where: UserFundoWhereUniqueInput
     update: XOR<UserFundoUpdateWithoutFundoInput, UserFundoUncheckedUpdateWithoutFundoInput>
@@ -19342,7 +20941,7 @@ export namespace Prisma {
     rut: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    creadoPor: string
+    creadopor: UserCreateNestedOneWithoutFundosCreadosInput
   }
 
   export type FundoUncheckedCreateWithoutUserFundosInput = {
@@ -19369,6 +20968,7 @@ export namespace Prisma {
     emailVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    fundosCreados?: FundoCreateNestedManyWithoutCreadoporInput
   }
 
   export type UserUncheckedCreateWithoutUserFundosInput = {
@@ -19380,6 +20980,7 @@ export namespace Prisma {
     emailVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    fundosCreados?: FundoUncheckedCreateNestedManyWithoutCreadoporInput
   }
 
   export type UserCreateOrConnectWithoutUserFundosInput = {
@@ -19413,6 +21014,7 @@ export namespace Prisma {
     lat: number
     lon: number
     codeSagGrower: string
+    encargados?: EncargadosCreateNestedManyWithoutTerrenoInput
     cuarteles?: cuartelCreateNestedManyWithoutTerrenoInput
   }
 
@@ -19425,6 +21027,7 @@ export namespace Prisma {
     lat: number
     lon: number
     codeSagGrower: string
+    encargados?: EncargadosUncheckedCreateNestedManyWithoutTerrenoInput
     cuarteles?: cuartelUncheckedCreateNestedManyWithoutTerrenoInput
   }
 
@@ -19456,7 +21059,7 @@ export namespace Prisma {
     rut?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    creadoPor?: StringFieldUpdateOperationsInput | string
+    creadopor?: UserUpdateOneRequiredWithoutFundosCreadosNestedInput
   }
 
   export type FundoUncheckedUpdateWithoutUserFundosInput = {
@@ -19489,6 +21092,7 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundosCreados?: FundoUpdateManyWithoutCreadoporNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUserFundosInput = {
@@ -19500,6 +21104,7 @@ export namespace Prisma {
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundosCreados?: FundoUncheckedUpdateManyWithoutCreadoporNestedInput
   }
 
   export type RolUpsertWithoutUserFundosInput = {
@@ -19556,6 +21161,74 @@ export namespace Prisma {
     userFundoId?: StringFilter<"Terreno"> | string
   }
 
+  export type TerrenoCreateWithoutEncargadosInput = {
+    id?: string
+    areaHectareas: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creadoPor: string
+    lat: number
+    lon: number
+    codeSagGrower: string
+    userFundo: UserFundoCreateNestedOneWithoutTerrenosInput
+    cuarteles?: cuartelCreateNestedManyWithoutTerrenoInput
+  }
+
+  export type TerrenoUncheckedCreateWithoutEncargadosInput = {
+    id?: string
+    areaHectareas: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    creadoPor: string
+    lat: number
+    lon: number
+    codeSagGrower: string
+    userFundoId: string
+    cuarteles?: cuartelUncheckedCreateNestedManyWithoutTerrenoInput
+  }
+
+  export type TerrenoCreateOrConnectWithoutEncargadosInput = {
+    where: TerrenoWhereUniqueInput
+    create: XOR<TerrenoCreateWithoutEncargadosInput, TerrenoUncheckedCreateWithoutEncargadosInput>
+  }
+
+  export type TerrenoUpsertWithoutEncargadosInput = {
+    update: XOR<TerrenoUpdateWithoutEncargadosInput, TerrenoUncheckedUpdateWithoutEncargadosInput>
+    create: XOR<TerrenoCreateWithoutEncargadosInput, TerrenoUncheckedCreateWithoutEncargadosInput>
+    where?: TerrenoWhereInput
+  }
+
+  export type TerrenoUpdateToOneWithWhereWithoutEncargadosInput = {
+    where?: TerrenoWhereInput
+    data: XOR<TerrenoUpdateWithoutEncargadosInput, TerrenoUncheckedUpdateWithoutEncargadosInput>
+  }
+
+  export type TerrenoUpdateWithoutEncargadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    areaHectareas?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creadoPor?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lon?: FloatFieldUpdateOperationsInput | number
+    codeSagGrower?: StringFieldUpdateOperationsInput | string
+    userFundo?: UserFundoUpdateOneRequiredWithoutTerrenosNestedInput
+    cuarteles?: cuartelUpdateManyWithoutTerrenoNestedInput
+  }
+
+  export type TerrenoUncheckedUpdateWithoutEncargadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    areaHectareas?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    creadoPor?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lon?: FloatFieldUpdateOperationsInput | number
+    codeSagGrower?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+    cuarteles?: cuartelUncheckedUpdateManyWithoutTerrenoNestedInput
+  }
+
   export type UserFundoCreateWithoutTerrenosInput = {
     id?: string
     assignedAt?: Date | string
@@ -19575,6 +21248,26 @@ export namespace Prisma {
   export type UserFundoCreateOrConnectWithoutTerrenosInput = {
     where: UserFundoWhereUniqueInput
     create: XOR<UserFundoCreateWithoutTerrenosInput, UserFundoUncheckedCreateWithoutTerrenosInput>
+  }
+
+  export type EncargadosCreateWithoutTerrenoInput = {
+    id?: string
+    userFundoId: string
+  }
+
+  export type EncargadosUncheckedCreateWithoutTerrenoInput = {
+    id?: string
+    userFundoId: string
+  }
+
+  export type EncargadosCreateOrConnectWithoutTerrenoInput = {
+    where: EncargadosWhereUniqueInput
+    create: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput>
+  }
+
+  export type EncargadosCreateManyTerrenoInputEnvelope = {
+    data: EncargadosCreateManyTerrenoInput | EncargadosCreateManyTerrenoInput[]
+    skipDuplicates?: boolean
   }
 
   export type cuartelCreateWithoutTerrenoInput = {
@@ -19632,6 +21325,31 @@ export namespace Prisma {
     fundoId?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rolId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EncargadosUpsertWithWhereUniqueWithoutTerrenoInput = {
+    where: EncargadosWhereUniqueInput
+    update: XOR<EncargadosUpdateWithoutTerrenoInput, EncargadosUncheckedUpdateWithoutTerrenoInput>
+    create: XOR<EncargadosCreateWithoutTerrenoInput, EncargadosUncheckedCreateWithoutTerrenoInput>
+  }
+
+  export type EncargadosUpdateWithWhereUniqueWithoutTerrenoInput = {
+    where: EncargadosWhereUniqueInput
+    data: XOR<EncargadosUpdateWithoutTerrenoInput, EncargadosUncheckedUpdateWithoutTerrenoInput>
+  }
+
+  export type EncargadosUpdateManyWithWhereWithoutTerrenoInput = {
+    where: EncargadosScalarWhereInput
+    data: XOR<EncargadosUpdateManyMutationInput, EncargadosUncheckedUpdateManyWithoutTerrenoInput>
+  }
+
+  export type EncargadosScalarWhereInput = {
+    AND?: EncargadosScalarWhereInput | EncargadosScalarWhereInput[]
+    OR?: EncargadosScalarWhereInput[]
+    NOT?: EncargadosScalarWhereInput | EncargadosScalarWhereInput[]
+    id?: StringFilter<"Encargados"> | string
+    userFundoId?: StringFilter<"Encargados"> | string
+    terrenoId?: StringFilter<"Encargados"> | string
   }
 
   export type cuartelUpsertWithWhereUniqueWithoutTerrenoInput = {
@@ -19870,6 +21588,7 @@ export namespace Prisma {
     lon: number
     codeSagGrower: string
     userFundo: UserFundoCreateNestedOneWithoutTerrenosInput
+    encargados?: EncargadosCreateNestedManyWithoutTerrenoInput
   }
 
   export type TerrenoUncheckedCreateWithoutCuartelesInput = {
@@ -19882,6 +21601,7 @@ export namespace Prisma {
     lon: number
     codeSagGrower: string
     userFundoId: string
+    encargados?: EncargadosUncheckedCreateNestedManyWithoutTerrenoInput
   }
 
   export type TerrenoCreateOrConnectWithoutCuartelesInput = {
@@ -19998,6 +21718,7 @@ export namespace Prisma {
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
     userFundo?: UserFundoUpdateOneRequiredWithoutTerrenosNestedInput
+    encargados?: EncargadosUpdateManyWithoutTerrenoNestedInput
   }
 
   export type TerrenoUncheckedUpdateWithoutCuartelesInput = {
@@ -20010,6 +21731,7 @@ export namespace Prisma {
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
     userFundoId?: StringFieldUpdateOperationsInput | string
+    encargados?: EncargadosUncheckedUpdateManyWithoutTerrenoNestedInput
   }
 
   export type TareaUpsertWithWhereUniqueWithoutCuartelInput = {
@@ -20500,6 +22222,15 @@ export namespace Prisma {
     rolId: string
   }
 
+  export type FundoCreateManyCreadoporInput = {
+    id?: string
+    nombre: string
+    direccion: string
+    rut: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserFundoUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20521,6 +22252,35 @@ export namespace Prisma {
     fundoId?: StringFieldUpdateOperationsInput | string
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     rolId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FundoUpdateWithoutCreadoporInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    direccion?: StringFieldUpdateOperationsInput | string
+    rut?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFundos?: UserFundoUpdateManyWithoutFundoNestedInput
+  }
+
+  export type FundoUncheckedUpdateWithoutCreadoporInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    direccion?: StringFieldUpdateOperationsInput | string
+    rut?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userFundos?: UserFundoUncheckedUpdateManyWithoutFundoNestedInput
+  }
+
+  export type FundoUncheckedUpdateManyWithoutCreadoporInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nombre?: StringFieldUpdateOperationsInput | string
+    direccion?: StringFieldUpdateOperationsInput | string
+    rut?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserFundoCreateManyRolInput = {
@@ -20603,6 +22363,7 @@ export namespace Prisma {
     lat?: FloatFieldUpdateOperationsInput | number
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
+    encargados?: EncargadosUpdateManyWithoutTerrenoNestedInput
     cuarteles?: cuartelUpdateManyWithoutTerrenoNestedInput
   }
 
@@ -20615,6 +22376,7 @@ export namespace Prisma {
     lat?: FloatFieldUpdateOperationsInput | number
     lon?: FloatFieldUpdateOperationsInput | number
     codeSagGrower?: StringFieldUpdateOperationsInput | string
+    encargados?: EncargadosUncheckedUpdateManyWithoutTerrenoNestedInput
     cuarteles?: cuartelUncheckedUpdateManyWithoutTerrenoNestedInput
   }
 
@@ -20629,6 +22391,11 @@ export namespace Prisma {
     codeSagGrower?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EncargadosCreateManyTerrenoInput = {
+    id?: string
+    userFundoId: string
+  }
+
   export type cuartelCreateManyTerrenoInput = {
     id?: string
     hectareas: number
@@ -20636,6 +22403,21 @@ export namespace Prisma {
     updatedAt?: Date | string
     sueloId: string
     plantaId: string
+  }
+
+  export type EncargadosUpdateWithoutTerrenoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EncargadosUncheckedUpdateWithoutTerrenoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EncargadosUncheckedUpdateManyWithoutTerrenoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userFundoId?: StringFieldUpdateOperationsInput | string
   }
 
   export type cuartelUpdateWithoutTerrenoInput = {

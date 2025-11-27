@@ -1,26 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ExecutionContext } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Request } from "express";
-import { jwtConstants } from "../constants/jwt.constants";
-
-const cookieExtractor = (req:Request): string | null => {
-    if(req && req.cookies){
-        return req.cookies['access_token']
-    }
-    return null;
-}
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-    constructor(){
-        super({
-            jwtFromRequest: cookieExtractor,
-            ignoreExpiration: false,
-            secretOrKey: jwtConstants.secret
-        });
-    }
-
-    async validate(payload:any){
-        return { id: payload.sub, email: payload.email}
+    getRequest(context: ExecutionContext) {
+        const request = context.switchToHttp().getRequest();
+        
+        if (!request.headers.authorization && request.cookies?.access_token) {
+            request.headers.authorization = `Bearer ${request.cookies.access_token}`;
+        }
+        
+        return request;
     }
 }

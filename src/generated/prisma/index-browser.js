@@ -155,6 +155,12 @@ exports.Prisma.UserFundoScalarFieldEnum = {
   rolId: 'rolId'
 };
 
+exports.Prisma.EncargadosScalarFieldEnum = {
+  id: 'id',
+  userFundoId: 'userFundoId',
+  terrenoId: 'terrenoId'
+};
+
 exports.Prisma.TerrenoScalarFieldEnum = {
   id: 'id',
   areaHectareas: 'areaHectareas',
@@ -262,6 +268,7 @@ exports.Prisma.ModelName = {
   Rol: 'Rol',
   Fundo: 'Fundo',
   UserFundo: 'UserFundo',
+  Encargados: 'Encargados',
   Terreno: 'Terreno',
   Suelo: 'Suelo',
   Planta: 'Planta',

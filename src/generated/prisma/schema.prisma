@@ -18,6 +18,7 @@ model User {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now()) @updatedAt
   userFundos    UserFundo[]
+  fundosCreados Fundo[]
 
   @@index([email])
   @@map("User")
@@ -40,6 +41,7 @@ model Fundo {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @default(now()) @updatedAt
   creadoPor  String
+  creadopor  User        @relation(fields: [creadoPor], references: [id])
   userFundos UserFundo[]
 
   @@map("Fundo")
@@ -59,17 +61,27 @@ model UserFundo {
   @@map("UserFundo")
 }
 
+model Encargados {
+  id          String  @id @default(uuid())
+  userFundoId String
+  terrenoId   String
+  terreno     Terreno @relation(fields: [terrenoId], references: [id])
+
+  @@map("Encargados")
+}
+
 model Terreno {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   areaHectareas Float
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
   creadoPor     String
   lat           Float
   lon           Float
   codeSagGrower String
   userFundoId   String
-  userFundo     UserFundo @relation(fields: [userFundoId], references: [id])
+  userFundo     UserFundo    @relation(fields: [userFundoId], references: [id])
+  encargados    Encargados[]
 
   cuarteles cuartel[]
 
