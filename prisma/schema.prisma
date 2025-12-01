@@ -122,6 +122,7 @@ model Planta {
 model cuartel {
   id        String     @id @default(uuid())
   hectareas Float
+  nombre    String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
   terrenoId String
@@ -160,6 +161,7 @@ model Tarea {
   tipo        String
   descripcion String
   fecha       DateTime
+  estado      String      @default("pendiente")
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt
   cuartelId   String

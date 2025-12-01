@@ -9,6 +9,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 export class TerrenoController {
   constructor(private readonly terrenoService: TerrenoService) {}
+
   
   @Post('crear')
   async crearTerreno(

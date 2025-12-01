@@ -33,6 +33,14 @@ export class TerrenoService {
                 lon: terrenoNuevo.lon,
                 codeSagGrower: terrenoNuevo.codeSagGrower,
                 userFundoId: userFundo.id,
+                cuarteles:{
+                    create: (terrenoNuevo.cuarteles || []).map(cuartel => ({
+                        hectareas: cuartel.hectareas,
+                        nombre: cuartel.nombre,
+                        plantaId: cuartel.plantaId,
+                        sueloId: cuartel.sueloId,
+                    }))
+                }
             },
             include:{
                 userFundo:{
@@ -67,10 +75,30 @@ export class TerrenoService {
             where:{ userFundoId: userFundo.id },
             select:{
                 id:true,
+                nombre:true,
                 areaHectareas:true,
                 lat:true,
                 lon:true,
                 codeSagGrower:true,
+                cuarteles:{
+                    select:{
+                        id:true,
+                        nombre:true,
+                        hectareas:true,
+                        planta:{
+                            select:{
+                                nombre:true,
+                                variedad:true,
+                            }
+                        },
+                        suelo:{
+                            select:{
+                                tipo:true,
+                            }
+                        }
+                    }
+                }
+
             }
         });
         

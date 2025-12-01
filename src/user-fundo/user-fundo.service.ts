@@ -46,6 +46,7 @@ export class UserFundoService {
                 nombre: fundoData.nombre,
                 direccion: fundoData.direccion,
                 rut: fundoData.rut,
+                rutDueno: fundoData.rutDueno, 
                 creadoPor: userId,
             },
         });
@@ -119,6 +120,7 @@ export class UserFundoService {
                 }
             })
             return encargados.map(encargados =>({
+                id: encargados.id,
                 nombre: encargados.user.nombre,
                 email: encargados.user.email
                 
@@ -192,17 +194,18 @@ export class UserFundoService {
         async asignarEncargadoATerreno(asignarEncargadoATerrenoDto:AsignarEncargadoATerrenoDto, adminUserId:string){
             const { terrenoId, userFundoId } = asignarEncargadoATerrenoDto;
 
-            const adminUserFundo = await this.prisma.userFundo.findUnique({
-                where: { id: adminUserId },
+            const adminUserFundo = await this.prisma.userFundo.findFirst({
+                where: { userId: adminUserId, rol:{nombre:"ADMIN"} },
                 include: { rol: true, fundo: true }
             });
 
-            if (!adminUserFundo || adminUserFundo.rol.nombre !== 'ADMIN') {
+            if (!adminUserFundo) {
                 throw new UnauthorizedException("Solo un administrador puede asignar encargados a terrenos");
             }
 
             const terreno = await this.prisma.terreno.findUnique({
-                where: { id: terrenoId }
+                where: { id: terrenoId },
+                include: { userFundo: true }
             })
             const encargadoUserFundo = await this.prisma.userFundo.findUnique({
                 where: { id: userFundoId },
@@ -217,6 +220,10 @@ export class UserFundoService {
                 throw new NotFoundException("El usuario encargado no existe");
             }
 
+            if (encargadoUserFundo.fundoId !== adminUserFundo.fundoId){
+                throw new BadRequestException("El administrador solo puede asignar encargados dentro de su propio fundo");
+            }
+
             if (encargadoUserFundo.rol.nombre !== 'ENCARGADO'){
                 throw new UnauthorizedException("El usuario no tiene el rol de encargado");
             }
@@ -229,8 +236,60 @@ export class UserFundoService {
                 data:{
                     terrenoId:terrenoId,
                     userFundoId:userFundoId
+                },
+                include:{
+                    terreno:{ select:{ nombre:true } },
+                    userFundo:{
+                        select:{
+                            user: { select: { id:true, nombre:true, email:true }},
+                            rol:  { select: { nombre:true }},
+                            fundo: { select: { nombre:true }}
+                        }
+                    }
                 }
             })
     
-        } 
+        }
+
+        async obtenerEncargadosDeTerreno(terrenoId:string, adminUserId:string){
+            const adminUserFundo = await this.prisma.userFundo.findFirst({
+                where: { userId: adminUserId, rol:{nombre:"ADMIN"} },
+                include: { rol: true, fundo: true }
+            });
+
+            if (!adminUserFundo) {
+                throw new UnauthorizedException("Solo un administrador puede ver los encargados de un terreno");
+            }
+
+            const terreno = await this.prisma.terreno.findUnique({
+                where: { id: terrenoId },
+                include: { userFundo: true }
+            })
+
+            if (!terreno) {
+                throw new NotFoundException("El terreno no existe");
+            }
+
+            if (terreno.userFundo.fundoId !== adminUserFundo.fundoId) {
+                throw new BadRequestException("El administrador solo puede ver los encargados dentro de su propio fundo");
+            }
+
+            const encargados = await this.prisma.encargados.findMany({
+                where:{ terrenoId: terrenoId },
+                include:{
+                    userFundo:{
+                        include:{
+                            user: { select: { id:true, nombre:true, email:true }},
+                            rol:  { select: { nombre:true }},
+                            fundo: { select: { nombre:true }}
+                        }
+                    }
+                }
+            })
+            return encargados.map(encargados =>({
+                id: encargados.userFundo.id,
+                nombre: encargados.userFundo.user.nombre,
+                email: encargados.userFundo.user.email
+            }));
+        }
 }

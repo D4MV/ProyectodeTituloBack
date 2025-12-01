@@ -1,4 +1,24 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsNumber, IsString, IsUUID, Validate, ValidateNested } from 'class-validator';
+
+export class CreateCuartelInputDto {
+    @IsNumber()
+    @IsNotEmpty()
+    hectareas: number;
+
+    @IsString()
+    @IsNotEmpty()
+    nombre: string; 
+
+    @IsUUID()
+    @IsNotEmpty()
+    plantaId: string; 
+
+    @IsUUID()
+    @IsNotEmpty()
+    sueloId: string; 
+
+}
 
 export class CreateTerrenoDto {
 
@@ -21,6 +41,8 @@ export class CreateTerrenoDto {
     @IsNotEmpty({ message: 'El código SAG es obligatorio' })
     @IsString()
     codeSagGrower!: string;
-
-
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateCuartelInputDto)
+    cuarteles?: CreateCuartelInputDto[];
 }
