@@ -158,33 +158,50 @@ model Producto {
 
 model Tarea {
   id          String      @id @default(uuid())
-  tipo        String
+  nombre      String
   descripcion String
-  fecha       DateTime
+  fechaTermino       DateTime
+  creadoPor   String
   estado      String      @default("pendiente")
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt
   cuartelId   String
-  productoId  String
-  producto    Producto    @relation(fields: [productoId], references: [id])
+  productoId  String?
+  tipoTareaId String
+  tipoTarea   TipoTarea   @relation(fields: [tipoTareaId], references: [id])
+  producto    Producto?    @relation(fields: [productoId], references: [id])
   cuartel     cuartel     @relation(fields: [cuartelId], references: [id])
   ordenAplicacion OrdenAplicacion[]
   @@map("Tarea")
 }
 
+model TipoTarea{
+  id          String      @id @default(uuid())
+  nombre      String
+  descripcion String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
+
+  Tarea       Tarea[]
+  @@map("TipoTarea")
+}
+
 
 model OrdenAplicacion {
   id                      String      @id @default(uuid())
-  nombre                  String
   fechaEntrega            DateTime
-  fechaAplicacion         DateTime
+  fechaAplicacion         DateTime?
   dosis                   Float
   cantidadApli            Float
   objetivo                String
-  mojamientoRecomendado   String
-  mojamientoReal          String
-  numMaquinadas           Int
-  gastoTotal             Float
+  formaAplicacion          String
+  mojamiento              Int
+  numMaquinaria           Int
+  necesidadTotal          Float
+  necesidadMaquinaria     String
+  numAutSag               Int?
+  numLote                 Int?
+  numGuia                 Int?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt
   tareaId     String

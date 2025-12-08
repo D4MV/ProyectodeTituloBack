@@ -5,12 +5,16 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterWithFundoDto } from './dto/registerWithFundo';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { UserFundoService } from 'src/user-fundo/user-fundo.service';
 
 
 @Controller('auth')
 export class AuthController {
 
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly userFundoService: UserFundoService,
+    ) {}
 
     @Post('registerWithFundo')
     async registerWhithFundo(@Body() registerData: RegisterWithFundoDto) {
@@ -117,11 +121,16 @@ export class AuthController {
 
     @Get('profile')
     @UseGuards(JwtAuthGuard)
-    profile(@Request() req: ExpressRequest){
+    async profile(@Request() req: any){
         console.log('=== PROFILE ENDPOINT ===');
         console.log('Cookies recibidas:', req.cookies);
         console.log('Authorization header:', req.headers.authorization);
         console.log('Usuario autenticado:', req.user);
-        return req.user;
+
+        const fundos = await this.userFundoService.getFundosByUserId(req.user.id);
+        return {
+            user: req.user,
+            fundos,
+        };
     }
 }

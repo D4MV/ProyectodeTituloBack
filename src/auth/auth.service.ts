@@ -164,7 +164,20 @@ export class AuthService {
             throw new UnauthorizedException('Error al generar el token');
         }
         await this.updateRefreshToken(user.id, token.refreshToken);
-        const fundos = await this.userFundoService.getFundosByUserId(user.id);
+        
+        const fundos = await this.prisma.userFundo.findMany({
+            where: { userId: user.id },
+            include: {
+                fundo: true,
+                rol: {
+                    select: {
+                        id: true,
+                        nombre: true,
+                        descripcion: true
+                    }
+                }
+            }
+        });
 
         return { token, user: userWithoutPassword, fundos }
 
@@ -208,7 +221,7 @@ export class AuthService {
 
     async refreshTokens(userId: string, refreshToken: string) {
         const user = await this.prisma.user.findUnique({
-            where: { id: userId }
+            where: { id: userId },
         });
 
         if (!user || !user.refreshToken ) {

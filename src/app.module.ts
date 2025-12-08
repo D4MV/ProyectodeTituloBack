@@ -7,9 +7,12 @@ import { PlantaModule } from './planta/planta.module';
 import { CuartelModule } from './cuartel/cuartel.module';
 import { SueloModule } from './suelo/suelo.module';
 import { TareaModule } from './tarea/tarea.module';
+import { ProductoModule } from './producto/producto.module';
+import { OrdenAplicacionModule } from './orden-aplicacion/orden-aplicacion.module';
+import { ExcelModule } from './excel/excel.module';
 
 @Module({
-  imports: [ AuthModule, FundoModule, FundoModule, UserFundoModule, TerrenoModule, PlantaModule, CuartelModule, SueloModule, TareaModule ],
+  imports: [ AuthModule, FundoModule, FundoModule, UserFundoModule, TerrenoModule, PlantaModule, CuartelModule, SueloModule, TareaModule, ProductoModule, OrdenAplicacionModule, ExcelModule ],
   controllers: [],
   providers: [],
 })
