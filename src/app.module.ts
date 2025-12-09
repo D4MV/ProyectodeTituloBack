@@ -10,9 +10,24 @@ import { TareaModule } from './tarea/tarea.module';
 import { ProductoModule } from './producto/producto.module';
 import { OrdenAplicacionModule } from './orden-aplicacion/orden-aplicacion.module';
 import { ExcelModule } from './excel/excel.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
-  imports: [ AuthModule, FundoModule, FundoModule, UserFundoModule, TerrenoModule, PlantaModule, CuartelModule, SueloModule, TareaModule, ProductoModule, OrdenAplicacionModule, ExcelModule ],
+  imports: [ 
+    AuthModule, 
+    FundoModule, 
+    FundoModule, 
+    UserFundoModule, 
+    TerrenoModule, 
+    PlantaModule, 
+    CuartelModule, 
+    SueloModule, 
+    TareaModule, 
+    ProductoModule, 
+    OrdenAplicacionModule, 
+    ExcelModule,
+    HealthModule 
+  ],
   controllers: [],
   providers: [],
 })

@@ -1,53 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# TerraTrack Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend de TerraTrack construido con NestJS, PostgreSQL y Prisma.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Requisitos Previos
 
-## Description
+- Node.js 20 LTS o superior
+- PostgreSQL 14 o superior
+- pnpm (recomendado) o npm
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Configuración del Proyecto
 
-## Project setup
+### 1. Instalar dependencias
 
 ```bash
-$ npm install
+pnpm install
 ```
 
-## Compile and run the project
+### 2. Configurar variables de entorno
+
+Copia el archivo `.env.example` a `.env` y configura las variables:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+Edita el archivo `.env` con tus valores:
+
+```env
+DATABASE_URL=postgresql://usuario:password@localhost:5432/terratrack?schema=public
+JWT_SECRET=tu_secret_aqui
+JWT_EXPIRATION=7d
+ALLOWED_ORIGINS=http://localhost:5173
+```
+
+### 3. Ejecutar migraciones de Prisma
 
 ```bash
-# unit tests
+pnpm prisma:migrate
+pnpm prisma:generate
+```
+
+### 4. Iniciar el servidor de desarrollo
+
+```bash
+# Modo desarrollo (con hot-reload)
+pnpm start:dev
+
+# Modo producción local
+pnpm build
+pnpm start:prod
+```
+
+La API estará disponible en `http://localhost:3000`
+
+## 📊 Base de Datos
+
+### Ejecutar migraciones
+
+```bash
+npx prisma migrate dev --name nombre_de_la_migracion
+```
+
+### Ver la base de datos con Prisma Studio
+
+```bash
+npx prisma studio
+```
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+pnpm test
+
+# E2E tests
+pnpm test:e2e
+
+# Test coverage
+pnpm test:cov
+```
+
+## 📦 Despliegue en Azure
+
+Consulta la guía completa en [AZURE_DEPLOYMENT.md](./AZURE_DEPLOYMENT.md)
+
+### Resumen rápido:
+
+1. **Pila de runtime:** Node 20 LTS
+2. **Variables de entorno:** Configúralas en Azure Portal
+3. **Base de datos:** Azure Database for PostgreSQL
+4. **Health check:** `GET /health`
+
+## 🔐 Endpoints Principales
+
+- `POST /auth/register` - Registro de usuario
+- `POST /auth/login` - Inicio de sesión
+- `GET /health` - Health check
+- `GET /fundo` - Listar fundos
+- `POST /orden-aplicacion` - Crear orden de aplicación
+- Y muchos más...
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── auth/           # Autenticación y autorización
+├── fundo/          # Gestión de fundos
+├── terreno/        # Gestión de terrenos
+├── cuartel/        # Gestión de cuarteles
+├── planta/         # Gestión de plantas
+├── producto/       # Gestión de productos
+├── tarea/          # Gestión de tareas
+├── orden-aplicacion/ # Órdenes de aplicación
+├── excel/          # Generación de reportes Excel
+├── health/         # Health checks
+├── prisma/         # Cliente de Prisma
+└── main.ts         # Punto de entrada
+```
+
+## 🛠️ Stack Tecnológico
+
+- **Framework:** NestJS
+- **Base de datos:** PostgreSQL
+- **ORM:** Prisma
+- **Autenticación:** JWT + Passport
+- **Validación:** class-validator
+- **Testing:** Jest
+- **Generación de Excel:** ExcelJS
+
+## 👥 Contribución
+
+1. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+2. Commit tus cambios (`git commit -m 'Agrega nueva funcionalidad'`)
+3. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+4. Abre un Pull Request
+
+## 📝 Licencia
+
+Este proyecto es privado y confidencial.
+
+---
+
+Desarrollado con ❤️ para TerraTrack
 $ npm run test
 
 # e2e tests

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, BadRequestException, Logger } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 
 interface OrdenAplicacionData {
@@ -37,18 +37,29 @@ interface OrdenAplicacionData {
 
 @Injectable()
 export class ExcelService {
+  private readonly logger = new Logger(ExcelService.name);
   
-  async generateOrdenAplicacionExcel(ordenes: OrdenAplicacionData[]): Promise<any> {
-    const workbook = new ExcelJS.Workbook();
+  async generateOrdenAplicacionExcel(ordenes: OrdenAplicacionData[]): Promise<Buffer> {
+    if (!ordenes || ordenes.length === 0) {
+      this.logger.warn('Se intentó generar un Excel sin datos de órdenes.');
+      throw new BadRequestException('No se proporcionaron datos para generar el informe.');
+    }
 
-    ordenes.forEach((orden, index) => {
-      const worksheet = workbook.addWorksheet(`Orden ${index + 1}`);
-      this.createOrdenAplicacionSheet(worksheet, orden);
-    });
-    
+    try {
+      const workbook = new ExcelJS.Workbook();
 
-    const buffer = await workbook.xlsx.writeBuffer();
-    return Buffer.from(buffer);
+      ordenes.forEach((orden, index) => {
+        const worksheet = workbook.addWorksheet(`Orden ${index + 1}`);
+        this.createOrdenAplicacionSheet(worksheet, orden);
+      });
+      
+      const buffer = await workbook.xlsx.writeBuffer();
+      return Buffer.from(buffer);
+
+    } catch (error) {
+      this.logger.error('Error al generar el archivo Excel de Orden de Aplicación', error.stack);
+      throw new InternalServerErrorException('No se pudo generar el archivo Excel.');
+    }
   }
   
   private createOrdenAplicacionSheet(worksheet: ExcelJS.Worksheet, orden: OrdenAplicacionData) {
@@ -75,14 +86,14 @@ export class ExcelService {
     
     this.addCell(worksheet, 'A3', orden.cuartel);
     this.addCell(worksheet, 'C3', orden.fechaEntrega);
-    this.addCell(worksheet, 'F3', orden.numMaquinaria.toString());
+    this.addCell(worksheet, 'F3', orden.numMaquinaria);
     
     this.addCell(worksheet, 'A4', 'Variedad', false, 'FFD9D9D9');
     this.addCell(worksheet, 'C4', 'superficie', false, 'FFD9D9D9');
     this.addCell(worksheet, 'F4', 'Fecha de Aplicación', false, 'FFD9D9D9');
     
     this.addCell(worksheet, 'A5', orden.variedad);
-    this.addCell(worksheet, 'C5', orden.superficie.toString());
+    this.addCell(worksheet, 'C5', orden.superficie);
     this.addCell(worksheet, 'F5', orden.fechaAplicacion);
     
     this.addCell(worksheet, 'A6', 'Nombre comercial', false, 'FFD9D9D9');
@@ -98,12 +109,12 @@ export class ExcelService {
     this.addCell(worksheet, 'A7', orden.nombreComercial);
     this.addCell(worksheet, 'B7', orden.ingredienteActivo);
     this.addCell(worksheet, 'C7', orden.objetivo);
-    this.addCell(worksheet, 'D7', orden.dosis.toString());
+    this.addCell(worksheet, 'D7', orden.dosis);
     this.addCell(worksheet, 'E7', orden.necesidadMaquinaria);
-    this.addCell(worksheet, 'F7', orden.necesidadTotal.toString());
-    this.addCell(worksheet, 'G7', orden.numAutorizacionSag?.toString() || '');
-    this.addCell(worksheet, 'H7', orden.numeroLote?.toString() || '');
-    this.addCell(worksheet, 'I7', orden.numeroGuia?.toString() || '');
+    this.addCell(worksheet, 'F7', orden.necesidadTotal);
+    this.addCell(worksheet, 'G7', orden.numAutorizacionSag ?? '');
+    this.addCell(worksheet, 'H7', orden.numeroLote ?? '');
+    this.addCell(worksheet, 'I7', orden.numeroGuia ?? '');
     
     this.addCell(worksheet, 'A9', 'mojamiento', false, 'FFD9D9D9');
     this.addCell(worksheet, 'B9', 'estado Fenologico', false, 'FFD9D9D9');
@@ -112,7 +123,7 @@ export class ExcelService {
     this.addCell(worksheet, 'E9', 'recibe', false, 'FFD9D9D9');
     
    
-    this.addCell(worksheet, 'A10', orden.mojamiento.toString());
+    this.addCell(worksheet, 'A10', orden.mojamiento);
     this.addCell(worksheet, 'B10', orden.estadoFenologico);
     this.addCell(worksheet, 'C10', orden.formaAplicacion);
     this.addCell(worksheet, 'D10', orden.emisor);
@@ -129,12 +140,12 @@ export class ExcelService {
     
     this.addCell(worksheet, 'A14', orden.fechaInicio || '');
     this.addCell(worksheet, 'B14', orden.cuartelConfirmacion || '');
-    this.addCell(worksheet, 'C14', orden.numMaquinariaConfirmacion?.toString() || '');
+    this.addCell(worksheet, 'C14', orden.numMaquinariaConfirmacion ?? '');
     this.addCell(worksheet, 'D14', orden.horaInicio || '');
     this.addCell(worksheet, 'E14', orden.horaTermino || '');
   }
   
-  private addCell(worksheet: ExcelJS.Worksheet, address: string, value: string, isBold = false, bgColor?: string) {
+  private addCell(worksheet: ExcelJS.Worksheet, address: string, value: string | number, isBold = false, bgColor?: string) {
     const cell = worksheet.getCell(address);
     cell.value = value;
     
@@ -196,10 +207,15 @@ export class ExcelService {
   }
 
 
-  async generarCuadernoDeCampoExcelI(){
-    const workbook = new ExcelJS.Workbook();
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    return Buffer.from(buffer);
+  async generarCuadernoDeCampoExcelI(): Promise<Buffer> {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      // TODO: Implementar lógica para llenar el cuaderno de campo
+      const buffer = await workbook.xlsx.writeBuffer();
+      return Buffer.from(buffer);
+    } catch (error) {
+      this.logger.error('Error al generar el archivo Excel de Cuaderno de Campo', error.stack);
+      throw new InternalServerErrorException('No se pudo generar el archivo Excel del cuaderno de campo.');
+    }
   }
 }
