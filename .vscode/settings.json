@@ -7,5 +7,11 @@
     "src/generated/**": true
   },
   "typescript.tsserver.maxTsServerMemory": 4096,
-"typescript.tsdk": "node_modules\\typescript\\lib"
+"typescript.tsdk": "node_modules\\typescript\\lib",
+"appService.zipIgnorePattern": [
+  "node_modules{,/**}",
+  ".vscode{,/**}"
+],
+"appService.defaultWebAppToDeploy": "/subscriptions/6948c267-7cc1-43ac-855d-b1d59f8e9561/resourceGroups/terratrackbk_group/providers/Microsoft.Web/sites/terratrackbk",
+"appService.deploySubpath": "."
 }
