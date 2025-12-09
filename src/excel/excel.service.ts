@@ -9,7 +9,7 @@ interface OrdenAplicacionData {
   numMaquinaria: number;
   variedad: string;
   superficie: number;
-  fechaAplicacion: string;
+  fechaAplicacion: string | null;
   
 
   nombreComercial: string;
@@ -94,7 +94,7 @@ export class ExcelService {
     
     this.addCell(worksheet, 'A5', orden.variedad);
     this.addCell(worksheet, 'C5', orden.superficie);
-    this.addCell(worksheet, 'F5', orden.fechaAplicacion);
+    this.addCell(worksheet, 'F5', orden.fechaAplicacion ? orden.fechaAplicacion : 'N/A');
     
     this.addCell(worksheet, 'A6', 'Nombre comercial', false, 'FFD9D9D9');
     this.addCell(worksheet, 'B6', 'Ingrediente Activo', false, 'FFD9D9D9');
@@ -125,7 +125,7 @@ export class ExcelService {
    
     this.addCell(worksheet, 'A10', orden.mojamiento);
     this.addCell(worksheet, 'B10', orden.estadoFenologico);
-    this.addCell(worksheet, 'C10', orden.formaAplicacion);
+    this.addCell(worksheet, 'C10', orden.formaAplicacion ? orden.formaAplicacion : 'N/A');
     this.addCell(worksheet, 'D10', orden.emisor);
     this.addCell(worksheet, 'E10', orden.recibe);
     

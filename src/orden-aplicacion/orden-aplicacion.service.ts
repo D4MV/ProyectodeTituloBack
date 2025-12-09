@@ -6,9 +6,9 @@ import { ExcelService } from 'src/excel/excel.service';
 @Injectable()
 export class OrdenAplicacionService {
 
-    constructor(private prisma: PrismaService, private excelService: ExcelService){}
+    constructor(private prisma: PrismaService, private excelService: ExcelService) { }
     async crearOrdenAplicacion(data: CrearOrdenAplicacionDto, userId: string) {
-        // 1. Verificar que el usuario sea ADMIN
+
         const userFundo = await this.prisma.userFundo.findFirst({
             where: { userId: userId },
             include: { rol: { select: { nombre: true } } }
@@ -22,7 +22,7 @@ export class OrdenAplicacionService {
             throw new UnauthorizedException('Solo el ADMIN puede crear órdenes de aplicación');
         }
 
-        // 2. Buscar la tarea y verificar que existe
+
         const tarea = await this.prisma.tarea.findUnique({
             where: { id: data.tareaId },
             include: {
@@ -38,17 +38,16 @@ export class OrdenAplicacionService {
             throw new NotFoundException('Tarea no encontrada');
         }
 
-        // 3. Validar que la tarea pertenece al fundo del admin
+
         if (tarea.cuartel.terreno.userFundoId !== userFundo.id) {
             throw new BadRequestException('La tarea no pertenece a tu fundo');
         }
 
-        // 4. Validar que la tarea esté en estado "en_progreso" para crear la orden
+
         if (tarea.estado !== 'en_progreso') {
             throw new BadRequestException('Solo se pueden crear órdenes para tareas en estado "en_progreso"');
         }
 
-        // 5. Verificar que no exista ya una orden de aplicación para esta tarea
         const ordenExistente = await this.prisma.ordenAplicacion.findFirst({
             where: { tareaId: data.tareaId }
         });
@@ -57,13 +56,12 @@ export class OrdenAplicacionService {
             throw new BadRequestException('Ya existe una orden de aplicación para esta tarea');
         }
 
-        // 6. Crear la orden de aplicación
-        // La fechaEntrega es la fecha de creación de la tarea (createdAt)
+
         const ordenAplicacion = await this.prisma.ordenAplicacion.create({
             data: {
                 tareaId: data.tareaId,
-                fechaEntrega: tarea.createdAt, // Fecha de creación de la tarea
-                fechaAplicacion: new Date(), // Fecha actual cuando se crea la orden
+                fechaEntrega: tarea.createdAt,
+                fechaAplicacion: new Date(),
                 dosis: data.dosis,
                 cantidadApli: data.cantidadApli,
                 objetivo: data.objetivo,
@@ -72,7 +70,7 @@ export class OrdenAplicacionService {
                 numMaquinaria: data.numMaquinaria,
                 necesidadTotal: data.necesidadTotal,
                 necesidadMaquinaria: data.necesidadMaquinaria,
-                // Campos opcionales (se pueden agregar después)
+
                 numAutSag: data.numAutSag,
                 numLote: data.numLote,
                 numGuia: data.numGuia,
@@ -102,7 +100,7 @@ export class OrdenAplicacionService {
     }
 
     async exportarOrdenesAExcel(userId: string): Promise<Buffer> {
-        // 1. Validar que sea ADMIN
+
         const userFundo = await this.prisma.userFundo.findFirst({
             where: { userId: userId },
             include: { rol: { select: { nombre: true } } }
@@ -112,7 +110,7 @@ export class OrdenAplicacionService {
             throw new UnauthorizedException('Solo el ADMIN puede exportar órdenes');
         }
 
-        // 2. Obtener las órdenes con todos los datos relacionados
+
         const ordenes = await this.prisma.ordenAplicacion.findMany({
             where: {
                 tarea: {
@@ -131,7 +129,7 @@ export class OrdenAplicacionService {
                         cuartel: {
                             include: {
                                 terreno: true,
-                                planta: true // Para obtener la variedad
+                                planta: true
                             }
                         },
                         tipoTarea: true,
@@ -142,7 +140,8 @@ export class OrdenAplicacionService {
             orderBy: { fechaAplicacion: 'desc' }
         });
 
-        // 3. Transformar datos al formato requerido
+
+
         const ordenesData = ordenes.map(orden => ({
             ordenId: orden.id,
             cuartel: orden.tarea.cuartel.nombre,
@@ -150,11 +149,13 @@ export class OrdenAplicacionService {
             numMaquinaria: orden.numMaquinaria,
             variedad: orden.tarea.cuartel.planta?.nombre || 'Sin variedad',
             superficie: orden.tarea.cuartel.hectareas,
-            fechaAplicacion: this.excelService.formatDate(orden.fechaAplicacion),
-            
-            // Datos del producto
+            fechaAplicacion: (orden.fechaAplicacion instanceof Date && !isNaN(orden.fechaAplicacion.getTime()))
+                ? this.excelService.formatDate(orden.fechaAplicacion)
+                : null,
+
+
             nombreComercial: orden.tarea.producto?.nombre || 'Sin producto',
-            ingredienteActivo: orden.tarea.producto?.nombre || 'N/A', // Ajusta según tu modelo
+            ingredienteActivo: orden.tarea.producto?.nombre || 'N/A',
             objetivo: orden.objetivo,
             dosis: orden.dosis,
             necesidadMaquinaria: orden.necesidadMaquinaria,
@@ -162,15 +163,15 @@ export class OrdenAplicacionService {
             numAutorizacionSag: orden.numAutSag,
             numeroLote: orden.numLote,
             numeroGuia: orden.numGuia,
-            
-            // Datos adicionales
+
+
             mojamiento: orden.mojamiento,
-            estadoFenologico: 'Por definir', // Agrega este campo si lo tienes en tu modelo
+            estadoFenologico: 'Por definir',
             formaAplicacion: orden.formaAplicacion,
-            emisor: 'Administrador', // Puedes obtener esto del usuario que creó la orden
-            recibe: 'Encargado', // Puedes obtener esto de la tabla encargados
-            
-            // Confirmación (vacíos para llenar manualmente)
+            emisor: 'Administrador',
+            recibe: 'Encargado',
+
+
             fechaInicio: '',
             cuartelConfirmacion: '',
             numMaquinariaConfirmacion: 0,

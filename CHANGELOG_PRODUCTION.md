@@ -11,25 +11,25 @@ Este documento resume todos los cambios realizados para preparar la aplicación 
 ### 1. **Manejo de Errores Mejorado**
 
 #### `src/excel/excel.service.ts`
-- ✅ Agregado `Logger` para registro de errores
-- ✅ Implementado `try-catch` en funciones asíncronas
-- ✅ Validación de datos de entrada (array vacío/null)
-- ✅ Tipos mejorados: `addCell` ahora acepta `string | number`
-- ✅ Mejores mensajes de error con `BadRequestException` y `InternalServerErrorException`
+-  Agregado `Logger` para registro de errores
+-  Implementado `try-catch` en funciones asíncronas
+-  Validación de datos de entrada (array vacío/null)
+-  Tipos mejorados: `addCell` ahora acepta `string | number`
+-  Mejores mensajes de error con `BadRequestException` y `InternalServerErrorException`
 
 #### `src/prisma/prisma.service.ts`
-- ✅ Implementado `OnModuleDestroy` para cerrar conexiones correctamente
-- ✅ Agregado `Logger` para monitorear conexiones de BD
-- ✅ Manejo de errores en conexión y desconexión
+-  Implementado `OnModuleDestroy` para cerrar conexiones correctamente
+-  Agregado `Logger` para monitorear conexiones de BD
+-  Manejo de errores en conexión y desconexión
 
 ### 2. **Configuración de Producción**
 
 #### `src/main.ts`
-- ✅ **CORS dinámico** basado en variable de entorno `ALLOWED_ORIGINS`
-- ✅ Puerto configurable desde `process.env.PORT` (requerido por Azure)
-- ✅ `enableShutdownHooks()` para cerrar conexiones limpiamente
-- ✅ Logger agregado para startup y configuración
-- ✅ Manejo de errores en bootstrap
+-  **CORS dinámico** basado en variable de entorno `ALLOWED_ORIGINS`
+-  Puerto configurable desde `process.env.PORT` (requerido por Azure)
+-  `enableShutdownHooks()` para cerrar conexiones limpiamente
+-  Logger agregado para startup y configuración
+-  Manejo de errores en bootstrap
 
 **Antes:**
 ```typescript
@@ -59,9 +59,9 @@ await app.listen(port);
 ### 3. **Health Check Endpoint**
 
 #### Nuevos archivos:
-- ✅ `src/health/health.controller.ts`
-- ✅ `src/health/health.service.ts`
-- ✅ `src/health/health.module.ts`
+-  `src/health/health.controller.ts`
+-  `src/health/health.service.ts`
+-  `src/health/health.module.ts`
 
 **Endpoint:** `GET /health`
 
@@ -91,7 +91,7 @@ Azure puede usar este endpoint para verificar que la aplicación esté viva.
 ```
 
 #### Cambio crítico en dependencias:
-- ✅ Movido `prisma` de `devDependencies` → `dependencies`
+-  Movido `prisma` de `devDependencies` → `dependencies`
   - **Razón:** Azure necesita `prisma` en producción para generar el cliente
 
 ### 5. **Variables de Entorno**
@@ -111,7 +111,7 @@ Configura estas variables en Azure Portal.
 
 ---
 
-## 📁 Archivos Nuevos Creados
+##  Archivos Nuevos Creados
 
 ### Documentación:
 1. **`AZURE_DEPLOYMENT.md`** - Guía completa de despliegue en Azure
