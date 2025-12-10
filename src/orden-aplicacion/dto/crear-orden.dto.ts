@@ -38,20 +38,16 @@ export class CrearOrdenAplicacionDto {
   @IsNotEmpty()
   necesidadTotal: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  necesidadMaquinaria: string;
+  necesidadMaquinaria: number;
 
-
-  @IsInt()
   @IsOptional()
   numAutSag?: number;
 
-  @IsInt()
   @IsOptional()
   numLote?: number;
 
-  @IsInt()
   @IsOptional()
   numGuia?: number;
 }

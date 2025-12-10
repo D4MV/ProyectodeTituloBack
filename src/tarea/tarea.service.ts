@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CrearTareaDto } from './dto/crearTarea.dto';
 import { ObtenerTareasDto } from './dto/obtenerTareasDto';
@@ -111,7 +111,7 @@ export class TareaService {
                 },
                 include:{
                     tipoTarea:{select: {nombre: true}},
-                    producto:{select:{nombre:true}},
+                    producto:{select:{nombreComercial:true}},
                     cuartel:{select:{nombre:true,
                         terreno:{select:{nombre:true}}
                     }}
@@ -135,7 +135,7 @@ export class TareaService {
                 },
                 include:{
                     tipoTarea:{select: {nombre: true}},
-                    producto:{select:{nombre:true}},
+                    producto:{select:{nombreComercial:true}},
                     cuartel:{select:{nombre:true,
                         terreno:{select:{nombre:true}}
                     }}
@@ -170,7 +170,11 @@ export class TareaService {
         })
 
         if(!tarea){
-            throw new Error('Tarea no encontrada');
+            throw new NotFoundException('Tarea no encontrada');
+        }
+
+        if(tarea.cuartel.terreno.userFundoId !== userFundo.id){
+            throw new BadRequestException('El encargado no tiene permiso para actualizar esta tarea');
         }
 
         const encargado = await this.prisma.encargados.findFirst({
@@ -184,9 +188,17 @@ export class TareaService {
             throw new Error('El encargado no tiene permiso para actualizar esta tarea');
         }
 
-        return this.prisma.tarea.update({
+        const tareaActualizada = await this.prisma.tarea.update({
             where:{ id: tareaId.tareaId },
             data:{ estado: tareaId.estado }
         });
+
+        if(tareaId.estado === 'en_progreso'){
+            await this.prisma.ordenAplicacion.updateMany({
+                where:{ tareaId: tareaId.tareaId },
+                data:{ fechaAplicacion: new Date() }
+            })
+        }
+        return tareaActualizada;
     }
 }

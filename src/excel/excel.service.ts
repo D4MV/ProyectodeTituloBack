@@ -16,7 +16,7 @@ interface OrdenAplicacionData {
   ingredienteActivo: string;
   objetivo: string;
   dosis: number;
-  necesidadMaquinaria: string;
+  necesidadMaquinaria: number;
   necesidadTotal: number;
   numAutorizacionSag: number | null;
   numeroLote: number | null;
@@ -33,6 +33,30 @@ interface OrdenAplicacionData {
   numMaquinariaConfirmacion: number;
   horaInicio: string;
   horaTermino: string;
+}
+
+export interface CuadernoCampoData {
+  fechaEntrega: Date;
+  fechaAplicacion: Date;
+  variedad: string;
+  cuartel: string;
+  has: number;
+  nombreComercial: string;
+  ingredienteActivo: string;
+  etiqueta: string;
+  asoex: string;
+  pppl: string;
+  dosis: number;
+  unidad: string;
+  mojamientoReal: number;
+  totalProducto: number;
+  necesidadMaquinaria: number;
+  numMaquinaria: number;
+  gastoTotal: number;
+  numOrden: number;
+  fechaPosibleCosecha: Date;
+  objetivo: string;
+  especie: string;
 }
 
 @Injectable()
@@ -207,15 +231,96 @@ export class ExcelService {
   }
 
 
-  async generarCuadernoDeCampoExcelI(): Promise<Buffer> {
+  async generarCuadernoDeCampoExcelI(data: CuadernoCampoData[]): Promise<Buffer> {
     try {
       const workbook = new ExcelJS.Workbook();
-      // TODO: Implementar lógica para llenar el cuaderno de campo
+      const worksheet = workbook.addWorksheet('Cuaderno de Campo');
+
+      worksheet.columns = [
+        { header: 'Fecha de Entrega', key: 'fechaEntrega', width: 20 }, 
+        { header: 'Fecha de Aplicación', key: 'fechaAplicacion', width: 20 },
+        { header: 'Variedad', key: 'variedad', width: 15 },
+        { header: 'Cuartel', key: 'cuartel', width: 15 },
+        { header: 'Hectáreas', key: 'has', width: 10 },
+        { header: 'Nombre Comercial', key: 'nombreComercial', width: 25 },
+        { header: 'Ingrediente Activo', key: 'ingredienteActivo', width: 25 },
+        { header: 'Etiqueta', key: 'etiqueta', width: 15 },
+        { header: 'ASOEX', key: 'asoex', width: 15 },
+        { header: 'PPPL', key: 'pppl', width: 15 },
+        { header: 'Dosis', key: 'dosis', width: 10 },
+        { header: 'Unidad', key: 'unidad', width: 10 },
+        { header: 'Mojamiento Real', key: 'mojamientoReal', width: 15 },
+        { header: 'Total Producto', key: 'totalProducto', width: 15 },
+        { header: 'Necesidad Maquinaria', key: 'necesidadMaquinaria', width: 20 },
+        { header: 'N° Maquinaria', key: 'numMaquinaria', width: 15 },
+        { header: 'Gasto Total', key: 'gastoTotal', width: 15 },
+        { header: 'N° Orden', key: 'numOrden', width: 10 },
+        { header: 'Fecha Posible Cosecha', key: 'fechaPosibleCosecha', width: 20 },
+        { header: 'Objetivo', key: 'objetivo', width: 20 },
+        { header: 'Especie', key: 'especie', width: 15 }
+      ];
+
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF4472C4' }
+      };
+      worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+      
+      data.forEach((item) =>{
+        worksheet.addRow({
+          fechaEntrega: item.fechaEntrega,
+          fechaAplicacion: item.fechaAplicacion,
+          variedad: item.variedad,
+          cuartel: item.cuartel,
+          has: item.has,
+          nombreComercial: item.nombreComercial,
+          ingredienteActivo: item.ingredienteActivo,
+          etiqueta: item.etiqueta,
+          asoex: item.asoex,
+          pppl: item.pppl,
+          dosis: item.dosis,
+          unidad: item.unidad,
+          mojamientoReal: item.mojamientoReal,
+          totalProducto: item.totalProducto,
+          necesidadMaquinaria: item.necesidadMaquinaria,
+          numMaquinaria: item.numMaquinaria,
+          gastoTotal: item.gastoTotal,
+          numOrden: item.numOrden,
+          fechaPosibleCosecha: item.fechaPosibleCosecha,
+          objetivo: item.objetivo,
+          especie: item.especie
+        })
+      })
+
+      worksheet.getColumn('fechaEntrega').numFmt = 'dd/mm/yyyy';
+      worksheet.getColumn('fechaAplicacion').numFmt = 'dd/mm/yyyy';
+      worksheet.getColumn('fechaPosibleCosecha').numFmt = 'dd/mm/yyyy';
+
+      worksheet.getColumn('has').numFmt = '0.00';
+      worksheet.getColumn('dosis').numFmt = '0.00';
+      worksheet.getColumn('mojamientoReal').numFmt = '0.00';
+      worksheet.getColumn('totalProducto').numFmt = '0.00';
+      worksheet.getColumn('gastoTotal').numFmt = '0.00';
+
+      worksheet.eachRow((row, rowNumber) =>{
+        row.eachCell((cell)=>{
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin'}
+          }
+        })
+      })
+
       const buffer = await workbook.xlsx.writeBuffer();
       return Buffer.from(buffer);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error('Error al generar el archivo Excel de Cuaderno de Campo', error.stack);
       throw new InternalServerErrorException('No se pudo generar el archivo Excel del cuaderno de campo.');
     }
-  }
+   
+  } 
 }

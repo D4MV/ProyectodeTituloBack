@@ -44,8 +44,8 @@ export class OrdenAplicacionService {
         }
 
 
-        if (tarea.estado !== 'en_progreso') {
-            throw new BadRequestException('Solo se pueden crear órdenes para tareas en estado "en_progreso"');
+        if (tarea.estado !== 'pendiente') {
+            throw new BadRequestException('Solo se pueden crear órdenes para tareas en estado "pendiente"');
         }
 
         const ordenExistente = await this.prisma.ordenAplicacion.findFirst({
@@ -61,7 +61,6 @@ export class OrdenAplicacionService {
             data: {
                 tareaId: data.tareaId,
                 fechaEntrega: tarea.createdAt,
-                fechaAplicacion: new Date(),
                 dosis: data.dosis,
                 cantidadApli: data.cantidadApli,
                 objetivo: data.objetivo,
@@ -81,6 +80,7 @@ export class OrdenAplicacionService {
                         nombre: true,
                         descripcion: true,
                         estado: true,
+                        producto:true,
                         cuartel: {
                             select: {
                                 nombre: true,
@@ -103,13 +103,15 @@ export class OrdenAplicacionService {
 
         const userFundo = await this.prisma.userFundo.findFirst({
             where: { userId: userId },
-            include: { rol: { select: { nombre: true } } }
+            include: { 
+                rol: { select: { nombre: true } },
+                user: { select: { nombre: true } } 
+            }
         });
 
         if (!userFundo || userFundo.rol.nombre !== 'ADMIN') {
             throw new UnauthorizedException('Solo el ADMIN puede exportar órdenes');
         }
-
 
         const ordenes = await this.prisma.ordenAplicacion.findMany({
             where: {
@@ -128,7 +130,19 @@ export class OrdenAplicacionService {
                     include: {
                         cuartel: {
                             include: {
-                                terreno: true,
+                                terreno: {
+                                    include: {
+                                        encargados: {
+                                            include: {
+                                                userFundo: {
+                                                    include: {
+                                                        user: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 planta: true
                             }
                         },
@@ -140,46 +154,48 @@ export class OrdenAplicacionService {
             orderBy: { fechaAplicacion: 'desc' }
         });
 
+        const ordenesData = ordenes.map(orden => {
 
+            const emisor = orden.tarea.creadoPor ;
+            
 
-        const ordenesData = ordenes.map(orden => ({
-            ordenId: orden.id,
-            cuartel: orden.tarea.cuartel.nombre,
-            fechaEntrega: this.excelService.formatDate(orden.fechaEntrega),
-            numMaquinaria: orden.numMaquinaria,
-            variedad: orden.tarea.cuartel.planta?.nombre || 'Sin variedad',
-            superficie: orden.tarea.cuartel.hectareas,
-            fechaAplicacion: (orden.fechaAplicacion instanceof Date && !isNaN(orden.fechaAplicacion.getTime()))
-                ? this.excelService.formatDate(orden.fechaAplicacion)
-                : null,
+            const encargado = orden.tarea.cuartel.terreno.encargados?.[0]?.userFundo?.user?.nombre ;
 
+            return {
+                ordenId: orden.id,
+                cuartel: orden.tarea.cuartel.nombre,
+                fechaEntrega: this.excelService.formatDate(orden.fechaEntrega),
+                numMaquinaria: orden.numMaquinaria,
+                variedad: orden.tarea.cuartel.planta?.nombre || 'Sin variedad',
+                superficie: orden.tarea.cuartel.hectareas,
+                fechaAplicacion: (orden.fechaAplicacion instanceof Date && !isNaN(orden.fechaAplicacion.getTime()))
+                    ? this.excelService.formatDate(orden.fechaAplicacion)
+                    : null,
 
-            nombreComercial: orden.tarea.producto?.nombre || 'Sin producto',
-            ingredienteActivo: orden.tarea.producto?.nombre || 'N/A',
-            objetivo: orden.objetivo,
-            dosis: orden.dosis,
-            necesidadMaquinaria: orden.necesidadMaquinaria,
-            necesidadTotal: orden.necesidadTotal,
-            numAutorizacionSag: orden.numAutSag,
-            numeroLote: orden.numLote,
-            numeroGuia: orden.numGuia,
+                nombreComercial: orden.tarea.producto?.nombreComercial || 'Sin producto',
+                ingredienteActivo: orden.tarea.producto?.ingrActivo || 'N/A',
+                objetivo: orden.objetivo,
+                dosis: orden.dosis,
+                necesidadMaquinaria: orden.necesidadMaquinaria ?? 0,
+                necesidadTotal: orden.necesidadTotal,
+                numAutorizacionSag: orden.numAutSag,
+                numeroLote: orden.numLote,
+                numeroGuia: orden.numGuia,
 
+                mojamiento: orden.mojamiento,
+                estadoFenologico: 'Por definir',
+                formaAplicacion: orden.formaAplicacion,
+                emisor: emisor,
+                recibe: encargado,
 
-            mojamiento: orden.mojamiento,
-            estadoFenologico: 'Por definir',
-            formaAplicacion: orden.formaAplicacion,
-            emisor: 'Administrador',
-            recibe: 'Encargado',
+                fechaInicio: '',
+                cuartelConfirmacion: '',
+                numMaquinariaConfirmacion: 0,
+                horaInicio: '',
+                horaTermino: ''
+            };
+        });
 
-
-            fechaInicio: '',
-            cuartelConfirmacion: '',
-            numMaquinariaConfirmacion: 0,
-            horaInicio: '',
-            horaTermino: ''
-        }));
-
-        // 4. Generar Excel con el formato específico
         return this.excelService.generateOrdenAplicacionExcel(ordenesData);
     }
 }

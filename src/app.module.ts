@@ -11,6 +11,7 @@ import { ProductoModule } from './producto/producto.module';
 import { OrdenAplicacionModule } from './orden-aplicacion/orden-aplicacion.module';
 import { ExcelModule } from './excel/excel.module';
 import { HealthModule } from './health/health.module';
+import { CuadernoCampoModule } from './cuaderno-campo/cuaderno-campo.module';
 
 @Module({
   imports: [ 
@@ -26,7 +27,8 @@ import { HealthModule } from './health/health.module';
     ProductoModule, 
     OrdenAplicacionModule, 
     ExcelModule,
-    HealthModule 
+    HealthModule,
+    CuadernoCampoModule 
   ],
   controllers: [],
   providers: [],

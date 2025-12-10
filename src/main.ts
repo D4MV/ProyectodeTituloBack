@@ -16,7 +16,6 @@ async function bootstrap() {
       transform: true
     }));
 
-    // CORS dinámico basado en variables de entorno
     const allowedOrigins = process.env.ALLOWED_ORIGINS 
       ? process.env.ALLOWED_ORIGINS.split(',') 
       : ['http://localhost:5173'];
@@ -28,10 +27,10 @@ async function bootstrap() {
 
     app.use(cookieParser());
 
-    // Configuración para Azure App Service
+
     const port = process.env.PORT || 3000;
     
-    // Habilitar shutdown hooks para cerrar conexiones correctamente
+
     app.enableShutdownHooks();
 
     await app.listen(port);
