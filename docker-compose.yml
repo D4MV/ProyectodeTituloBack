@@ -3,13 +3,29 @@ services:
     image: postgres:15
     container_name: postgres-db
     ports:
-      - "5432:5432" # Mapea el puerto 5432 del contenedor al host
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: terratrack
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persistencia de datos
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: terratrack
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

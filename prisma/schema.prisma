@@ -88,6 +88,7 @@ model Terreno {
   userFundoId   String
   userFundo     UserFundo @relation(fields: [userFundoId], references: [id])
   encargados    Encargados[]
+  finanza        Finanza[]
 
 
   cuarteles     cuartel[]
@@ -128,6 +129,7 @@ model cuartel {
   terrenoId String
   sueloId   String
   posibleCosecha DateTime? @default(now())
+  cantidadCosecha  Int? @default(0)
   suelo     Suelo      @relation(fields: [sueloId], references: [id])
   terreno   Terreno    @relation(fields: [terrenoId], references: [id])
   tarea     Tarea[]
@@ -208,11 +210,32 @@ model OrdenAplicacion {
   numAutSag               Int?
   numLote                 Int?
   numGuia                 Int?
+  
+  fechaInicio             DateTime?
+  horaInicio              String?
+  horaTermino             String?
+  numMaquinariaConfirmacion Int?
+  cuartelConfirmacion     String?
+  estadoConfirmacion      String @default("pendiente")
+
+
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now()) @updatedAt
   tareaId     String
   tarea       Tarea       @relation(fields: [tareaId], references: [id])
   @@map("OrdenAplicacion")
+}
+
+model Finanza {
+  id          String      @id @default(uuid())
+  tipo        String
+  monto       Float
+  descripcion String
+  fecha       DateTime
+  terrenoId   String
+  terreno     Terreno    @relation(fields: [terrenoId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
 }
 
 

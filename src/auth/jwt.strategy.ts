@@ -26,12 +26,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
             where:{
                 id: payload.sub
             },select:{
+                nombre:true,
+                apellido:true,
                 id:true,
                 email:true
             }
         });
         if(!user) return null;
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, nombre: user.nombre, apellido: user.apellido };
     }
 
     async generateToken(userId: string){
@@ -45,6 +47,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         const payload = {
             sub: user.id,
             email: user.email,
+            nombre: user.nombre,
+            apellido: user.apellido,
             iat: Math.floor(Date.now() / 1000),
         };
         return this.jwtService.sign(payload);
@@ -61,6 +65,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         const payload = {
             sub: user.id,
             email: user.email,
+            nombre: user.nombre,
+            apellido: user.apellido,
             type: 'access'
         };
 

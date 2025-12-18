@@ -11,7 +11,7 @@ export class CuadernoCampoService {
         private excelService: ExcelService,
     ){}
 
-    async generarCuadernoDeCampoExcel(userId: string): Promise<Buffer> {
+    async generarCuadernoDeCampoExcel(userId: string, terrenoId: string): Promise<Buffer> {
         const userFundo = await this.prisma.userFundo.findFirst({
             where: {userId: userId},
             include: {
@@ -28,14 +28,24 @@ export class CuadernoCampoService {
             throw new UnauthorizedException('Usuario no tiene permisos para generar el cuaderno de campo');
         }
 
+        const terreno = await this.prisma.terreno.findFirst({
+            where: {
+                id: terrenoId,
+                userFundoId: userFundo.id
+            }
+        });
+
+        if(!terreno){
+            throw new UnauthorizedException('El terreno no pertenece a tu fundo');
+        }
+
         const ordenesAplicacion = await this.prisma.ordenAplicacion.findMany({
             where:{
                 tarea:{
                     cuartel:{
-                        terreno:{
-                            userFundoId: userFundo.id
-                        }
-                    }
+                        terrenoId: terrenoId
+                    },
+                    estado: { not: 'cancelada' }
                 }
             },
             include:{

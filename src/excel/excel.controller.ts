@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { ExcelService } from './excel.service';
 import { OrdenAplicacionService } from 'src/orden-aplicacion/orden-aplicacion.service';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
@@ -12,13 +12,15 @@ export class ExcelController {
     private readonly ordenAplicacionService: OrdenAplicacionService
   ) {}
 
-  @Get('ordenes-aplicacion')
+  @Post('ordenes-aplicacion')
   async exportarOrdenesAplicacion(
+    @Body() body: { tareaId: string },
     @Request() req: any,
     @Res({ passthrough: false }) res: Response
   ) {
     const buffer = await this.ordenAplicacionService.exportarOrdenesAExcel(
-      req.user.id
+      req.user.id,
+      req.query.tareaId
     );
 
     res.setHeader(

@@ -13,8 +13,16 @@ export class CuadernoCampoController {
     @Request() req: any,
     @Res({ passthrough: false }) res: Response,
   ) {
+    const { terrenoId } = req.query;
+    
+    if (!terrenoId) {
+      res.status(400).json({ error: 'terrenoId es requerido' });
+      return;
+    }
+
     const buffer = await this.cuadernoCampoService.generarCuadernoDeCampoExcel(
       req.user.id,
+      terrenoId,
     );
 
     res.setHeader(

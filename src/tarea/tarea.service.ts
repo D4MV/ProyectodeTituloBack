@@ -107,14 +107,29 @@ export class TareaService {
                 where:{
                     cuartelId: filtros?.cuartelId 
                         ? filtros.cuartelId 
-                        : { in: cuartelesPermitidos }
+                        : { in: cuartelesPermitidos },
+                    estado: { not: 'cancelada' },
+                    NOT: {
+                        AND: [
+                            { estado: 'completada' },
+                            {
+                                ordenAplicacion: {
+                                    some: {
+                                        horaInicio: { not: null },
+                                        horaTermino: { not: null }
+                                    }
+                                }
+                            }
+                        ]
+                    }
                 },
                 include:{
                     tipoTarea:{select: {nombre: true}},
                     producto:{select:{nombreComercial:true}},
                     cuartel:{select:{nombre:true,
                         terreno:{select:{nombre:true}}
-                    }}
+                    }},
+                    ordenAplicacion:{select:{id:true}}
                 },
                 orderBy: { fechaTermino: 'desc' }
             });
@@ -132,13 +147,28 @@ export class TareaService {
             const tareas = await this.prisma.tarea.findMany({
                 where:{
                     cuartelId: filtros?.cuartelId ? filtros.cuartelId : { in: cuartelesDelFundo },
+                    estado: { not: 'cancelada' },
+                    NOT: {
+                        AND: [
+                            { estado: 'completada' },
+                            {
+                                ordenAplicacion: {
+                                    some: {
+                                        horaInicio: { not: null },
+                                        horaTermino: { not: null }
+                                    }
+                                }
+                            }
+                        ]
+                    }
                 },
                 include:{
                     tipoTarea:{select: {nombre: true}},
                     producto:{select:{nombreComercial:true}},
                     cuartel:{select:{nombre:true,
                         terreno:{select:{nombre:true}}
-                    }}
+                    }},
+                    ordenAplicacion:{select:{id:true}}
                 },
                 orderBy: { fechaTermino: 'desc' }
             })
@@ -173,14 +203,10 @@ export class TareaService {
             throw new NotFoundException('Tarea no encontrada');
         }
 
-        if(tarea.cuartel.terreno.userFundoId !== userFundo.id){
-            throw new BadRequestException('El encargado no tiene permiso para actualizar esta tarea');
-        }
-
         const encargado = await this.prisma.encargados.findFirst({
             where: {
-                terrenoId: tarea.cuartel.terreno.id,
-                userFundo: { userId: userId }
+                userFundoId: userFundo.id,
+                terrenoId: tarea.cuartel.terreno.id
             }
         });
 

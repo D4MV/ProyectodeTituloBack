@@ -264,7 +264,7 @@ export class ExcelService {
       worksheet.getRow(1).fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FF4472C4' }
+        fgColor: { argb: 'FF5B9BD5' }
       };
       worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
       
@@ -304,15 +304,35 @@ export class ExcelService {
       worksheet.getColumn('totalProducto').numFmt = '0.00';
       worksheet.getColumn('gastoTotal').numFmt = '0.00';
 
-      worksheet.eachRow((row, rowNumber) =>{
-        row.eachCell((cell)=>{
+      const totalRows = data.length + 1;
+      const totalColumns = 21;
+
+      for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
+        const row = worksheet.getRow(rowNumber);
+        for (let colNumber = 1; colNumber <= totalColumns; colNumber++) {
+          const cell = row.getCell(colNumber);
           cell.border = {
             top: { style: 'thin' },
             left: { style: 'thin' },
             bottom: { style: 'thin' },
             right: { style: 'thin'}
-          }
-        })
+          };
+        }
+      }
+
+      await worksheet.protect('',{
+        selectLockedCells: false,
+        selectUnlockedCells: false,
+        formatCells: false,
+        formatColumns: false,
+        formatRows: false,
+        insertRows: false,
+        insertColumns: false,
+        deleteRows: false,
+        deleteColumns: false,
+        sort: false,
+        autoFilter: false,
+        pivotTables: false
       })
 
       const buffer = await workbook.xlsx.writeBuffer();

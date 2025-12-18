@@ -8,7 +8,6 @@ export class PlantaController {
   constructor(private readonly plantaService: PlantaService) {}
 
   @Get('datos')
-  @UseGuards(JwtAuthGuard)
   async obtenerDatosPlanta() {
     return this.plantaService.tomarDatosPlanta();
   }
