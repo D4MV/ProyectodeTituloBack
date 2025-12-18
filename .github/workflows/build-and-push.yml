@@ -1,0 +1,62 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  ACR_NAME: ${{ secrets.ACR_NAME }}
+  IMAGE_NAME: terratrack-backend
+  
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login with Service Principal
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name: Get ACR login server
+        id: acr-info
+        run: |
+          ACR_LOGIN_SERVER=$(az acr show --name ${{ secrets.ACR_NAME }} --query loginServer --output tsv)
+          echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_OUTPUT
+          echo "ACR Login Server: $ACR_LOGIN_SERVER"
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            --build-arg PORT="${{ secrets.PORT }}" \
+            --build-arg NODE_ENV="${{ secrets.NODE_ENV }}" \
+            --build-arg JWT_EXPIRATION="${{ secrets.JWT_EXPIRATION }}" \
+            --build-arg ALLOWED_ORIGINS="${{ secrets.ALLOWED_ORIGINS }}" \
+            -t ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -t ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:latest \
+            -f Dockerfile .
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Logout from Azure
+        if: always()
+        run: |
+          az logout
