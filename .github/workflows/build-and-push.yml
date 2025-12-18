@@ -1,4 +1,4 @@
-name: Build and Push to ACR
+name: Build and Push to GHCR
 
 on:
   push:
@@ -11,36 +11,42 @@ on:
   workflow_dispatch:
 
 env:
-  ACR_NAME: ${{ secrets.ACR_NAME }}
-  IMAGE_NAME: terratrack-backend
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
   
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     environment: desarrollo
+    permissions:
+      contents: read
+      packages: write
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Azure Login with Service Principal
-        uses: azure/login@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to Azure Container Registry
-        run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
-
-      - name: Get ACR login server
-        id: acr-info
-        run: |
-          ACR_LOGIN_SERVER=$(az acr show --name ${{ secrets.ACR_NAME }} --query loginServer --output tsv)
-          echo "acr_login_server=$ACR_LOGIN_SERVER" >> $GITHUB_OUTPUT
-          echo "ACR Login Server: $ACR_LOGIN_SERVER"
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build Docker image
         run: |
+          IMAGE="${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')"
           docker build \
             --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
             --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" \
@@ -48,16 +54,12 @@ jobs:
             --build-arg NODE_ENV="${{ secrets.NODE_ENV }}" \
             --build-arg JWT_EXPIRATION="${{ secrets.JWT_EXPIRATION }}" \
             --build-arg ALLOWED_ORIGINS="${{ secrets.ALLOWED_ORIGINS }}" \
-            -t ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            -t ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:latest \
+            -t $IMAGE:${{ github.sha }} \
+            -t $IMAGE:latest \
             -f Dockerfile .
 
-      - name: Push Docker image to ACR
+      - name: Push Docker image to GHCR
         run: |
-          docker push ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          docker push ${{ steps.acr-info.outputs.acr_login_server }}/${{ env.IMAGE_NAME }}:latest
-
-      - name: Logout from Azure
-        if: always()
-        run: |
-          az logout
+          IMAGE="${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')"
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
