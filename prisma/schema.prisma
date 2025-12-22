@@ -158,7 +158,6 @@ model Producto {
   postPppl        String? @default("")
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @default(now()) @updatedAt
-  cuartelId       String
   creadoPor       String
   tarea Tarea[]
   @@map("Producto")
